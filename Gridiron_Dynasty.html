@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gridiron Dynasty — Legendary Rosters</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eceff3;--p:#fff;--ink:#16191f;--mu:#5d6673;--ln:#d5d9e0;--hd:#12264a;--lk:#1d4ed8;--ac:#f0b429;--up:#1b7a3d;--dn:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141c;--p:#18202b;--ink:#e8edf5;--mu:#98a3b3;--ln:#2b3644;--hd:#1d3f7a;--lk:#8ab4ff;--up:#5fd28a;--dn:#ff8a7a}}
+:root[data-theme="dark"]{--bg:#0f141c;--p:#18202b;--ink:#e8edf5;--mu:#98a3b3;--ln:#2b3644;--hd:#1d3f7a;--lk:#8ab4ff;--up:#5fd28a;--dn:#ff8a7a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:940px;margin:0 auto;padding:16px}
+header{background:var(--hd);color:#fff;border-radius:12px;padding:18px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font:700 32px/1 Oswald,Impact,sans-serif}
+.st{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;opacity:.92}.st b{display:block;font-size:18px}
+nav{display:flex;gap:2px;margin:14px 0;border-bottom:2px solid var(--ln);overflow-x:auto}
+nav button{background:none;border:0;padding:9px 13px;font:inherit;font-weight:600;color:var(--mu);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ac)}
+section{background:var(--p);border:1px solid var(--ln);border-radius:10px;padding:14px}
+.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:480px}
+th,td{padding:7px 6px;text-align:left;border-bottom:1px solid var(--ln);white-space:nowrap}th{font-size:12px;color:var(--mu)}
+.btn{background:var(--hd);color:#fff;border:0;border-radius:8px;padding:7px 12px;font:inherit;font-weight:600;cursor:pointer;margin:0 4px 6px 0}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--ln)}.btn.go{background:var(--ac);color:#1a1300;padding:10px 16px}
+.lnk{background:none;border:0;padding:0;font:inherit;color:var(--lk);text-decoration:underline;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+input,select{font:inherit;padding:9px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--ink)}
+.mu{color:var(--mu);margin:0 0 10px}.up{color:var(--up);font-weight:600}.dn{color:var(--dn);font-weight:600}
+.empty{color:var(--mu);padding:20px 0;text-align:center}h3{margin:14px 0 6px;font:700 18px Oswald,sans-serif}
+ul{list-style:none;margin:0;padding:0}li{padding:5px 0;border-bottom:1px solid var(--ln)}
+.badge{display:inline-block;font-size:10px;background:var(--ac);color:#1a1300;padding:1px 6px;border-radius:10px;margin-left:6px;font-weight:700;vertical-align:middle}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div><h1>Gridiron Dynasty</h1><div style="opacity:.9">32 legendary rosters · best seasons ever · one league forever</div></div>
+ <div class="st"><div>Season<b id="a"></b></div><div>Players<b id="b"></b></div><div>Last champion<b id="c"></b></div><div>Hall of Fame<b id="d"></b></div></div>
+</header>
+<nav id="nav"></nav>
+<section id="view"></section>
+<p style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><button class="btn go" data-a="play" id="play"></button><button class="btn alt" id="reset">Reset league</button></p>
+</main>
+<script>
+(function(){
+/* ---------- legendary roster data: 32 teams, 53-man rosters inspired by best seasons ---------- */
+var LEGEND = {
+ "Arizona Cardinals": {
+   tag: "2015 NFC Championship run",
+   players: [
+     ["QB", "Carson Palmer", 92], ["RB", "David Johnson", 89], ["RB", "Chris Johnson", 82], ["WR", "Larry Fitzgerald", 94],
+     ["WR", "Michael Floyd", 83], ["WR", "John Brown", 82], ["WR", "Jaron Brown", 74], ["TE", "Darren Fells", 78],
+     ["TE", "Jermaine Gresham", 77], ["OL", "Jared Veldheer", 88], ["OL", "Mike Iupati", 88], ["OL", "Lyle Sendlein", 81],
+     ["OL", "Earl Watford", 77], ["OL", "Bobby Massie", 79], ["OL", "D.J. Humphries", 73], ["OL", "Ted Larsen", 75],
+     ["OL", "A.Q. Shipley", 74], ["OL", "John Wetzel", 71], ["DL", "Calais Campbell", 93], ["DL", "Frostee Rucker", 82],
+     ["DL", "Cory Redding", 80], ["DL", "Rodney Gunter", 76], ["DL", "Josh Mauro", 75], ["DL", "Ed Stinson", 72],
+     ["DL", "Xavier Williams", 70], ["DL", "Corey Peters", 78], ["DL", "Red Bryant", 76], ["LB", "Karlos Dansby", 87],
+     ["LB", "Deone Bucannon", 85], ["LB", "Kevin Minter", 81], ["LB", "Markus Golden", 84], ["LB", "Dwight Freeney", 85],
+     ["LB", "Alex Okafor", 78], ["LB", "Alani Fua", 69], ["CB", "Patrick Peterson", 95], ["CB", "Tyrann Mathieu", 92],
+     ["CB", "Jerraud Powers", 80], ["CB", "Justin Bethel", 77], ["CB", "Cariel Brooks", 70], ["S", "Rashad Johnson", 82],
+     ["S", "Tony Jefferson", 83], ["S", "D.J. Swearinger", 76], ["S", "Chris Clemons", 73], ["K", "Chandler Catanzaro", 80],
+     ["P", "Drew Butler", 74], ["LS", "Mike Leach", 72],
+     ["QB", "Drew Stanton", 76], ["RB", "Andre Ellington", 79], ["WR", "Brittan Golden", 68], ["TE", "Troy Niklas", 72],
+     ["OL", "Bradley Sowell", 70], ["DL", "Eddie Goldman", 78], ["LB", "Shaquille Riddick", 67]
+   ]
+ },
+ "Atlanta Falcons": {
+   tag: "2016 NFC Championship season",
+   players: [
+     ["QB", "Matt Ryan", 94], ["RB", "Devonta Freeman", 89], ["RB", "Tevin Coleman", 84], ["WR", "Julio Jones", 97],
+     ["WR", "Mohamed Sanu", 83], ["WR", "Taylor Gabriel", 82], ["WR", "Justin Hardy", 74], ["TE", "Austin Hooper", 80],
+     ["TE", "Levine Toilolo", 74], ["OL", "Jake Matthews", 88], ["OL", "Andy Levitre", 86], ["OL", "Alex Mack", 92],
+     ["OL", "Chris Chester", 82], ["OL", "Ryan Schraeder", 87], ["OL", "Ben Garland", 72], ["OL", "Wes Schweitzer", 74],
+     ["OL", "Ty Sambrailo", 71], ["OL", "Sean Harlow", 69], ["DL", "Vic Beasley", 89], ["DL", "Grady Jarrett", 87],
+     ["DL", "Tyson Jackson", 79], ["DL", "Jonathan Babineaux", 80], ["DL", "Ra'Shede Hageman", 76], ["DL", "Derrick Shelby", 77],
+     ["DL", "Adrian Clayborn", 80], ["DL", "Courtney Upshaw", 74], ["DL", "Brooks Reed", 75], ["LB", "Deion Jones", 88],
+     ["LB", "De'Vondre Campbell", 79], ["LB", "Sean Weatherspoon", 78], ["LB", "LaRoy Reynolds", 72], ["LB", "Paul Worrilow", 76],
+     ["LB", "Philip Wheeler", 73], ["LB", "Josh Keyes", 68], ["CB", "Desmond Trufant", 89], ["CB", "Robert Alford", 83],
+     ["CB", "Brian Poole", 79], ["CB", "Jalen Collins", 77], ["CB", "C.J. Goodwin", 67], ["S", "Ricardo Allen", 81],
+     ["S", "Keanu Neal", 86], ["S", "Kemal Ishmael", 74], ["S", "Sharrod Neasman", 68], ["K", "Matt Bryant", 87],
+     ["P", "Matt Bosher", 79], ["LS", "Josh Harris", 72],
+     ["QB", "Matt Schaub", 74], ["RB", "Terron Ward", 70], ["WR", "Aldrick Robinson", 74], ["TE", "Joshua Perkins", 69],
+     ["OL", "Tom Compton", 72], ["DL", "Joe Vellano", 68], ["LB", "Darnell Sankey", 66]
+   ]
+ },
+ "Baltimore Ravens": {
+   tag: "2012 Super Bowl XLVII champions",
+   players: [
+     ["QB", "Joe Flacco", 92], ["RB", "Ray Rice", 89], ["RB", "Bernard Pierce", 79], ["WR", "Anquan Boldin", 91],
+     ["WR", "Torrey Smith", 85], ["WR", "Jacoby Jones", 79], ["WR", "Tandon Doss", 71], ["TE", "Dennis Pitta", 84],
+     ["TE", "Ed Dickson", 76], ["OL", "Michael Oher", 82], ["OL", "Marshal Yanda", 94], ["OL", "Matt Birk", 85],
+     ["OL", "Kelechi Osemele", 84], ["OL", "Bryant McKinnie", 81], ["OL", "Jah Reid", 72], ["OL", "Gino Gradkowski", 70],
+     ["OL", "Ramon Harewood", 68], ["OL", "Bobbie Williams", 74], ["DL", "Haloti Ngata", 94], ["DL", "Terrell Suggs", 93],
+     ["DL", "Pernell McPhee", 84], ["DL", "Arthur Jones", 82], ["DL", "Ma'ake Kemoeatu", 78], ["DL", "DeAngelo Tyson", 70],
+     ["DL", "Bryan Hall", 69], ["DL", "Marcus Spears", 75], ["DL", "Chris Canty", 81], ["LB", "Ray Lewis", 92],
+     ["LB", "Dannell Ellerbe", 84], ["LB", "Jameel McClain", 80], ["LB", "Courtney Upshaw", 79], ["LB", "Albert McClellan", 73],
+     ["LB", "Josh Bynes", 71], ["LB", "Brendon Ayanbadejo", 74], ["CB", "Lardarius Webb", 88], ["CB", "Cary Williams", 82],
+     ["CB", "Corey Graham", 81], ["CB", "Jimmy Smith", 83], ["CB", "Chykie Brown", 69], ["S", "Ed Reed", 94],
+     ["S", "Bernard Pollard", 84], ["S", "James Ihedigbo", 76], ["S", "Omar Brown", 67], ["K", "Justin Tucker", 91],
+     ["P", "Sam Koch", 80], ["LS", "Morgan Cox", 74],
+     ["QB", "Tyrod Taylor", 74], ["RB", "Anthony Allen", 68], ["WR", "Deonte Thompson", 69], ["TE", "Billy Bajema", 70],
+     ["OL", "Jack Cornell", 67], ["DL", "DeAngelo Tyson", 70], ["LB", "Adrian Hamilton", 65]
+   ]
+ },
+ "Buffalo Bills": {
+   tag: "1990 AFC champions",
+   players: [
+     ["QB", "Jim Kelly", 95], ["RB", "Thurman Thomas", 96], ["RB", "Kenneth Davis", 82], ["WR", "Andre Reed", 94],
+     ["WR", "James Lofton", 89], ["WR", "Don Beebe", 80], ["WR", "Steve Tasker", 78], ["TE", "Keith McKeller", 77],
+     ["TE", "Pete Metzelaars", 76], ["OL", "Will Wolford", 90], ["OL", "Jim Ritcher", 87], ["OL", "Kent Hull", 89],
+     ["OL", "John Davis", 84], ["OL", "Howard Ballard", 86], ["OL", "Glenn Parker", 82], ["OL", "Joe Devlin", 81],
+     ["OL", "Mark Traynowicz", 74], ["OL", "Adam Lingner", 72], ["DL", "Bruce Smith", 99], ["DL", "Jeff Wright", 84],
+     ["DL", "Leon Seals", 82], ["DL", "Art Still", 83], ["DL", "Cornelius Bennett", 93], ["DL", "Darryl Talley", 88],
+     ["DL", "Mike Lodish", 80], ["DL", "Scott Radecic", 75], ["DL", "Hal Garner", 73], ["LB", "Shane Conlan", 87],
+     ["LB", "Ray Bentley", 78], ["LB", "Carlton Bailey", 79], ["LB", "Marvcus Patton", 74], ["LB", "Mark Maddox", 71],
+     ["LB", "Eddie Goodlow", 68], ["LB", "David Braxton", 67], ["CB", "Nate Odomes", 85], ["CB", "Kirby Jackson", 82],
+     ["CB", "J.D. Williams", 76], ["CB", "Clifford Hicks", 69], ["CB", "Mickey Washington", 73], ["S", "Mark Kelso", 84],
+     ["S", "Leonard Smith", 82], ["S", "Dwight Drane", 71], ["S", "John Hagy", 68], ["K", "Scott Norwood", 79],
+     ["P", "Rick Tuten", 78], ["LS", "Adam Lingner", 72],
+     ["QB", "Frank Reich", 76], ["RB", "Don Smith", 71], ["WR", "Al Edwards", 72], ["TE", "Rob Awalt", 70],
+     ["OL", "Lance Cleeland", 68], ["DL", "Mike DeVito", 67], ["LB", "Vernon Maxwell", 65]
+   ]
+ },
+ "Carolina Panthers": {
+   tag: "2015 NFC champions",
+   players: [
+     ["QB", "Cam Newton", 96], ["RB", "Jonathan Stewart", 87], ["RB", "Mike Tolbert", 81], ["WR", "Ted Ginn Jr.", 82],
+     ["WR", "Devin Funchess", 80], ["WR", "Jerricho Cotchery", 78], ["WR", "Philly Brown", 72], ["TE", "Greg Olsen", 94],
+     ["TE", "Ed Dickson", 76], ["OL", "Michael Oher", 83], ["OL", "Andrew Norwell", 88], ["OL", "Ryan Kalil", 91],
+     ["OL", "Trai Turner", 87], ["OL", "Mike Remmers", 80], ["OL", "Amini Silatolu", 74], ["OL", "Daryl Williams", 73],
+     ["OL", "Chris Scott", 72], ["OL", "Fernando Velasco", 71], ["DL", "Kawann Short", 91], ["DL", "Star Lotulelei", 87],
+     ["DL", "Charles Johnson", 88], ["DL", "Jared Allen", 84], ["DL", "Mario Addison", 80], ["DL", "Kony Ealy", 79],
+     ["DL", "Vernon Butler", 75], ["DL", "Kyle Love", 74], ["DL", "Wes Horton", 71], ["LB", "Luke Kuechly", 98],
+     ["LB", "Thomas Davis", 91], ["LB", "Shaq Thompson", 82], ["LB", "A.J. Klein", 77], ["LB", "David Mayo", 70],
+     ["LB", "Adarius Glanton", 68], ["LB", "Ben Jacobs", 65], ["CB", "Josh Norman", 94], ["CB", "Bene Benwikere", 82],
+     ["CB", "Robert McClain", 77], ["CB", "Cortland Finnegan", 80], ["CB", "Colin Jones", 70], ["S", "Kurt Coleman", 87],
+     ["S", "Roman Harper", 82], ["S", "Tre Boston", 78], ["S", "Dean Marlowe", 67], ["K", "Graham Gano", 84],
+     ["P", "Brad Nortman", 77], ["LS", "J.J. Jansen", 74],
+     ["QB", "Derek Anderson", 75], ["RB", "Fozzy Whittaker", 74], ["WR", "Brenton Bersin", 69], ["TE", "Scott Simonson", 68],
+     ["OL", "Tyler Larsen", 67], ["DL", "Ryan Delaire", 68], ["LB", "Shaq Green-Thompson", 82]
+   ]
+ },
+ "Chicago Bears": {
+   tag: "1985 Super Bowl XX champions",
+   players: [
+     ["QB", "Jim McMahon", 89], ["RB", "Walter Payton", 98], ["RB", "Matt Suhey", 82], ["WR", "Willie Gault", 84],
+     ["WR", "Dennis McKinnon", 80], ["WR", "Ken Margerum", 75], ["WR", "Keith Ortego", 71], ["TE", "Emery Moorehead", 82],
+     ["TE", "Tim Wrightman", 73], ["OL", "Jim Covert", 93], ["OL", "Jay Hilgenberg", 91], ["OL", "Keith Van Horne", 86],
+     ["OL", "Mark Bortz", 88], ["OL", "Tom Thayer", 85], ["OL", "Kurt Becker", 83], ["OL", "Steve McMichael", 89],
+     ["OL", "Andy Frederick", 75], ["OL", "Rob Fada", 71], ["DL", "Richard Dent", 96], ["DL", "Dan Hampton", 95],
+     ["DL", "Steve McMichael", 93], ["DL", "William Perry", 88], ["DL", "Mike Hartenstine", 84], ["DL", "Henry Waechter", 76],
+     ["DL", "Tyrone Keys", 75], ["DL", "Otis Wilson", 92], ["DL", "Jimbo Covert", 90], ["LB", "Mike Singletary", 98],
+     ["LB", "Otis Wilson", 93], ["LB", "Wilber Marshall", 91], ["LB", "Ron Rivera", 84], ["LB", "Cliff Thrift", 76],
+     ["LB", "Brian Cabral", 72], ["LB", "Mike Richardson", 79], ["CB", "Leslie Frazier", 91], ["CB", "Mike Richardson", 88],
+     ["CB", "Vestee Jackson", 80], ["CB", "Reggie Phillips", 78], ["CB", "Terry Schmidt", 79], ["S", "Gary Fencik", 92],
+     ["S", "Dave Duerson", 91], ["S", "Todd Bell", 85], ["S", "Shaun Gayle", 79], ["K", "Kevin Butler", 86],
+     ["P", "Maury Buford", 76], ["LS", "Steve McMichael", 73],
+     ["QB", "Steve Fuller", 78], ["RB", "Calvin Thomas", 72], ["WR", "Brad Anderson", 68], ["TE", "Pat Dunsmore", 69],
+     ["OL", "Stefan Humphries", 71], ["DL", "Richard Dent", 96], ["LB", "Jim Morrissey", 70]
+   ]
+ },
+ "Cincinnati Bengals": {
+   tag: "1981 AFC champions",
+   players: [
+     ["QB", "Ken Anderson", 93], ["RB", "Pete Johnson", 89], ["RB", "Charles Alexander", 80], ["WR", "Cris Collinsworth", 91],
+     ["WR", "Isaac Curtis", 88], ["WR", "Steve Kreider", 77], ["WR", "Dan Ross", 80], ["TE", "Dan Ross", 83],
+     ["TE", "M.L. Harris", 72], ["OL", "Anthony Munoz", 99], ["OL", "Max Montoya", 90], ["OL", "Blair Bush", 84],
+     ["OL", "Dave Lapham", 83], ["OL", "Mike Wilson", 81], ["OL", "Bruce Kozerski", 78], ["OL", "Joe Walter", 75],
+     ["OL", "Brian Blados", 72], ["OL", "Vince Stroth", 70], ["DL", "Eddie Edwards", 88], ["DL", "Ross Browner", 89],
+     ["DL", "Coy Bacon", 87], ["DL", "Wilson Whitley", 82], ["DL", "Gary Burley", 80], ["DL", "Mike Reid", 83],
+     ["DL", "Jimmy Hargrove", 75], ["DL", "Guy Frazier", 73], ["DL", "Tom Dinkel", 74], ["LB", "Reggie Williams", 90],
+     ["LB", "Jim LeClair", 86], ["LB", "Bo Harris", 80], ["LB", "Rick Razzano", 76], ["LB", "Glenn Cameron", 75],
+     ["LB", "John Simmons", 73], ["LB", "Al Chesley", 70], ["CB", "Louis Breeden", 88], ["CB", "Ken Riley", 91],
+     ["CB", "Ray Griffin", 82], ["CB", "Bobby Kemp", 78], ["CB", "Mike Fuller", 76], ["S", "Tommy Casanova", 88],
+     ["S", "Bobby Kemp", 83], ["S", "Dick Jauron", 81], ["S", "Marvin Cobb", 74], ["K", "Jim Breech", 85],
+     ["P", "Pat McInally", 82], ["LS", "Pat McInally", 74],
+     ["QB", "Jack Thompson", 76], ["RB", "Elvis Peacock", 71], ["WR", "David Verser", 69], ["TE", "Rod Holman", 68],
+     ["OL", "Kenny Bunch", 67], ["DL", "Eddie Edwards", 88], ["LB", "Carl Zander", 68]
+   ]
+ },
+ "Cleveland Browns": {
+   tag: "1986 AFC Championship run",
+   players: [
+     ["QB", "Bernie Kosar", 92], ["RB", "Earnest Byner", 90], ["RB", "Kevin Mack", 88], ["WR", "Webster Slaughter", 86],
+     ["WR", "Reggie Langhorne", 83], ["WR", "Brian Brennan", 79], ["WR", "Clarence Weathers", 76], ["TE", "Ozzie Newsome", 95],
+     ["TE", "Harry Holt", 73], ["OL", "Cody Risien", 87], ["OL", "Mike Baab", 86], ["OL", "Rickey Bolden", 82],
+     ["OL", "Dan Fike", 80], ["OL", "Larry Williams", 79], ["OL", "Joe Devlin", 78], ["OL", "George Lilja", 74],
+     ["OL", "Paul Farren", 72], ["OL", "Tom Thayer", 75], ["DL", "Reggie Camp", 87], ["DL", "Michael Dean Perry", 90],
+     ["DL", "Bob Golic", 88], ["DL", "Carl Hairston", 86], ["DL", "Dave Puzzuoli", 79], ["DL", "Clay Matthews", 92],
+     ["DL", "Chip Banks", 89], ["DL", "Anthony Griggs", 74], ["DL", "Sam Clancy", 76], ["LB", "Chip Banks", 90],
+     ["LB", "Clay Matthews", 93], ["LB", "Mike Johnson", 86], ["LB", "Eddie Johnson", 84], ["LB", "Scott Nicolas", 74],
+     ["LB", "Lucius Sanford", 71], ["LB", "Willie Pless", 70], ["CB", "Frank Minnifield", 93], ["CB", "Hanford Dixon", 94],
+     ["CB", "Ray Ellis", 84], ["CB", "Darryl Franklin", 76], ["CB", "Mark Harper", 72], ["S", "Don Rogers", 87],
+     ["S", "Chris Rockins", 80], ["S", "Al Gross", 76], ["S", "Felix Wright", 83], ["K", "Matt Bahr", 85],
+     ["P", "Jeff Gossett", 76], ["LS", "Mike Baab", 72],
+     ["QB", "Mike Pagel", 74], ["RB", "Herman Fontenot", 72], ["WR", "Glen Young", 68], ["TE", "Tim Manoa", 69],
+     ["OL", "Rickey Bolden", 82], ["DL", "Reggie Camp", 87], ["LB", "Anthony Griggs", 74]
+   ]
+ },
+ "Dallas Cowboys": {
+   tag: "1992 Super Bowl XXVII champions",
+   players: [
+     ["QB", "Troy Aikman", 95], ["RB", "Emmitt Smith", 98], ["RB", "Kenneth Gant", 78], ["WR", "Michael Irvin", 97],
+     ["WR", "Alvin Harper", 88], ["WR", "Kelvin Martin", 84], ["WR", "James Dixon", 74], ["TE", "Jay Novacek", 90],
+     ["TE", "Scott Galbraith", 73], ["OL", "Mark Tuinei", 90], ["OL", "Nate Newton", 93], ["OL", "Mark Stepnoski", 91],
+     ["OL", "Erik Williams", 90], ["OL", "Kevin Gogan", 86], ["OL", "John Gesek", 83], ["OL", "Frank Cornish", 76],
+     ["OL", "Tom Myslinski", 72], ["OL", "Dale Hellestrae", 74], ["DL", "Charles Haley", 95], ["DL", "Tony Tolbert", 88],
+     ["DL", "Tony Casillas", 88], ["DL", "Russell Maryland", 86], ["DL", "Jimmie Jones", 83], ["DL", "Leon Lett", 88],
+     ["DL", "Chad Hennings", 82], ["DL", "Hurvin McCormack", 74], ["DL", "Larry Brown", 75], ["LB", "Ken Norton Jr.", 92],
+     ["LB", "Robert Jones", 85], ["LB", "Dixon Edwards", 83], ["LB", "Vinson Smith", 78], ["LB", "Godfrey Myles", 72],
+     ["LB", "John Roper", 70], ["LB", "Darrin Smith", 79], ["CB", "Larry Brown", 88], ["CB", "Kevin Smith", 86],
+     ["CB", "Thomas Everett", 85], ["CB", "Clayton Holmes", 81], ["CB", "Kenneth Gant", 74], ["S", "James Washington", 87],
+     ["S", "Darren Woodson", 89], ["S", "Bill Bates", 82], ["S", "Ray Horton", 78], ["K", "Lin Elliott", 80],
+     ["P", "Mike Saxon", 77], ["LS", "Dale Hellestrae", 74],
+     ["QB", "Steve Beuerlein", 78], ["RB", "Curvin Richards", 71], ["WR", "Alvin Harper", 88], ["TE", "Rob Awalt", 70],
+     ["OL", "Erik Williams", 90], ["DL", "Leon Lett", 88], ["LB", "Robert Jones", 85]
+   ]
+ },
+ "Denver Broncos": {
+   tag: "1998 Super Bowl XXXIII champions",
+   players: [
+     ["QB", "John Elway", 97], ["RB", "Terrell Davis", 98], ["RB", "Derek Loville", 78], ["WR", "Rod Smith", 92],
+     ["WR", "Ed McCaffrey", 89], ["WR", "Willie Green", 80], ["WR", "Justin Armour", 76], ["TE", "Shannon Sharpe", 96],
+     ["TE", "Dwayne Carswell", 78], ["OL", "Gary Zimmerman", 93], ["OL", "Tony Jones", 88], ["OL", "Tom Nalen", 91],
+     ["OL", "Mark Schlereth", 87], ["OL", "Brian Habib", 84], ["OL", "Dan Neil", 80], ["OL", "Harry Swayne", 78],
+     ["OL", "David Diaz-Infante", 75], ["OL", "Ken Lanier", 73], ["DL", "Neil Smith", 91], ["DL", "Michael Dean Perry", 88],
+     ["DL", "Alfred Williams", 87], ["DL", "Maa Tanuvasa", 84], ["DL", "Keith Traylor", 83], ["DL", "Trevor Pryce", 89],
+     ["DL", "Harald Hasselbach", 76], ["DL", "Cyron Brown", 72], ["DL", "Mike Lodish", 78], ["LB", "Bill Romanowski", 92],
+     ["LB", "John Mobley", 89], ["LB", "Allen Aldridge", 82], ["LB", "Keith Burns", 76], ["LB", "Glenn Cadrez", 79],
+     ["LB", "Seth Joyner", 80], ["LB", "Jeff Robinson", 72], ["CB", "Ray Crockett", 88], ["CB", "Dale Carter", 90],
+     ["CB", "Darrien Gordon", 85], ["CB", "Tory James", 83], ["CB", "Chris Hudson", 74], ["S", "Steve Atwater", 94],
+     ["S", "Tyrone Braxton", 89], ["S", "Darrius Johnson", 80], ["S", "Eric Brown", 75], ["K", "Jason Elam", 89],
+     ["P", "Tom Rouen", 79], ["LS", "Mike Lodish", 73],
+     ["QB", "Bubby Brister", 78], ["RB", "Vaughn Hebron", 74], ["WR", "Patrick Jeffers", 71], ["TE", "Ty Law", 68],
+     ["OL", "Trey Teague", 72], ["DL", "Trevor Pryce", 89], ["LB", "John Mobley", 89]
+   ]
+ },
+ "Detroit Lions": {
+   tag: "1991 NFC Championship run",
+   players: [
+     ["QB", "Erik Kramer", 88], ["RB", "Barry Sanders", 99], ["RB", "Mel Gray", 82], ["WR", "Herman Moore", 90],
+     ["WR", "Brett Perriman", 87], ["WR", "Willie Green", 80], ["WR", "Robert Clark", 76], ["TE", "Rodney Holman", 87],
+     ["TE", "David Lewis", 74], ["OL", "Lomas Brown", 92], ["OL", "Kevin Glover", 88], ["OL", "Mike Utley", 84],
+     ["OL", "Eric Andolsek", 83], ["OL", "Ken Dallafior", 80], ["OL", "Dennis McKnight", 78], ["OL", "Dave Lutz", 73],
+     ["OL", "Mike Piel", 71], ["OL", "Bob Boures", 69], ["DL", "Robert Porcher", 88], ["DL", "Jerry Ball", 91],
+     ["DL", "Dan Owens", 84], ["DL", "Kelvin Pritchett", 82], ["DL", "Dennis Gibson", 80], ["DL", "Tracy Scroggins", 76],
+     ["DL", "Mike Cofer", 85], ["DL", "James Jones", 74], ["DL", "Bobby Abrams", 72], ["LB", "Chris Spielman", 95],
+     ["LB", "Michael Cofer", 86], ["LB", "George Jamison", 82], ["LB", "Victor Jones", 76], ["LB", "Eddie Murray", 70],
+     ["LB", "Kenny Gant", 68], ["LB", "Scott Conover", 66], ["CB", "Bennie Blades", 91], ["CB", "Melvin Jenkins", 85],
+     ["CB", "Ray Crockett", 84], ["CB", "Terry Taylor", 80], ["CB", "William White", 82], ["S", "Bennie Blades", 92],
+     ["S", "William White", 84], ["S", "Harry Colon", 78], ["S", "Ryan McNeil", 76], ["K", "Jason Hanson", 90],
+     ["P", "Jim Arnold", 79], ["LS", "Mike Piel", 71],
+     ["QB", "Rodney Peete", 80], ["RB", "Eric Lynch", 72], ["WR", "Jeff Campbell", 70], ["TE", "Ty Hallock", 68],
+     ["OL", "Mike Utley", 84], ["DL", "Robert Porcher", 88], ["LB", "Chris Spielman", 95]
+   ]
+ },
+ "Green Bay Packers": {
+   tag: "1996 Super Bowl XXXI champions",
+   players: [
+     ["QB", "Brett Favre", 98], ["RB", "Edgar Bennett", 86], ["RB", "Dorsey Levens", 84], ["WR", "Antonio Freeman", 91],
+     ["WR", "Robert Brooks", 89], ["WR", "Don Beebe", 82], ["WR", "Terry Mickens", 76], ["TE", "Mark Chmura", 88],
+     ["TE", "Keith Jackson", 85], ["OL", "Ken Ruettgers", 89], ["OL", "Frank Winters", 88], ["OL", "Adam Timmerman", 87],
+     ["OL", "Ross Verba", 85], ["OL", "Aaron Taylor", 84], ["OL", "Earl Dotson", 82], ["OL", "Mike Flanagan", 76],
+     ["OL", "Lindsay Knapp", 72], ["OL", "Marco Rivera", 83], ["DL", "Reggie White", 99], ["DL", "Santana Dotson", 88],
+     ["DL", "Gilbert Brown", 91], ["DL", "Sean Jones", 90], ["DL", "Gabe Wilkins", 84], ["DL", "Keith McKenzie", 79],
+     ["DL", "Bob Kuberski", 74], ["DL", "Don Davey", 76], ["DL", "Jim Flanigan", 80], ["LB", "Wayne Simmons", 89],
+     ["LB", "George Koonce", 85], ["LB", "Brian Williams", 82], ["LB", "Bernardo Harris", 80], ["LB", "Ron Cox", 76],
+     ["LB", "Lamont Hollinquest", 70], ["LB", "Jude Waddy", 68], ["CB", "Doug Evans", 89], ["CB", "Craig Newsome", 86],
+     ["CB", "Tyrone Williams", 84], ["CB", "Roderick Mullen", 79], ["CB", "Mike Prior", 78], ["S", "LeRoy Butler", 94],
+     ["S", "Eugene Robinson", 87], ["S", "Chris Darkins", 76], ["S", "Travis Jervey", 78], ["K", "Chris Jacke", 84],
+     ["P", "Craig Hentrich", 83], ["LS", "Rob Davis", 74],
+     ["QB", "Jim McMahon", 76], ["RB", "William Henderson", 80], ["WR", "Charles Jordan", 72], ["TE", "Jeff Thomason", 70],
+     ["OL", "Gary Brown", 72], ["DL", "Reggie White", 99], ["LB", "Wayne Simmons", 89]
+   ]
+ },
+ "Houston Texans": {
+   tag: "2012 AFC South champions",
+   players: [
+     ["QB", "Matt Schaub", 89], ["RB", "Arian Foster", 93], ["RB", "Ben Tate", 82], ["WR", "Andre Johnson", 96],
+     ["WR", "Kevin Walter", 82], ["WR", "DeVier Posey", 74], ["WR", "Lestar Jean", 72], ["TE", "Owen Daniels", 89],
+     ["TE", "Garrett Graham", 78], ["OL", "Duane Brown", 92], ["OL", "Chris Myers", 88], ["OL", "Wade Smith", 86],
+     ["OL", "Derek Newton", 80], ["OL", "Antoine Caldwell", 78], ["OL", "Ryan Harris", 76], ["OL", "Ben Jones", 75],
+     ["OL", "Brandon Brooks", 82], ["OL", "Cody White", 70], ["DL", "J.J. Watt", 99], ["DL", "Antonio Smith", 88],
+     ["DL", "Shaun Cody", 82], ["DL", "Earl Mitchell", 80], ["DL", "Tim Jamison", 76], ["DL", "Jared Crick", 78],
+     ["DL", "Terrell McClain", 74], ["DL", "Whitney Mercilus", 84], ["DL", "Brooks Reed", 82], ["LB", "Brian Cushing", 91],
+     ["LB", "Connor Barwin", 84], ["LB", "Bradie James", 80], ["LB", "Tim Dobbins", 76], ["LB", "Darryl Sharpton", 74],
+     ["LB", "Barrett Ruud", 72], ["LB", "Jesse Nading", 70], ["CB", "Johnathan Joseph", 93], ["CB", "Kareem Jackson", 85],
+     ["CB", "Brice McCain", 80], ["CB", "Brandon Harris", 76], ["CB", "Alan Ball", 78], ["S", "Ed Reed", 92],
+     ["S", "Danieal Manning", 86], ["S", "Glover Quin", 84], ["S", "Shiloh Keo", 72], ["K", "Shayne Graham", 83],
+     ["P", "Donnie Jones", 79], ["LS", "Jon Weeks", 74],
+     ["QB", "T.J. Yates", 76], ["RB", "Justin Forsett", 78], ["WR", "Keshawn Martin", 71], ["TE", "James Casey", 74],
+     ["OL", "Ryan Harris", 76], ["DL", "J.J. Watt", 99], ["LB", "Brian Cushing", 91]
+   ]
+ },
+ "Indianapolis Colts": {
+   tag: "2006 Super Bowl XLI champions",
+   players: [
+     ["QB", "Peyton Manning", 99], ["RB", "Joseph Addai", 87], ["RB", "Dominic Rhodes", 84], ["WR", "Marvin Harrison", 97],
+     ["WR", "Reggie Wayne", 94], ["WR", "Brandon Stokley", 84], ["WR", "Aaron Moorehead", 74], ["TE", "Dallas Clark", 89],
+     ["TE", "Ben Utecht", 78], ["OL", "Tarik Glenn", 91], ["OL", "Jeff Saturday", 93], ["OL", "Ryan Diem", 86],
+     ["OL", "Jake Scott", 84], ["OL", "Charlie Johnson", 82], ["OL", "Dylan Gandy", 75], ["OL", "Tony Ugoh", 76],
+     ["OL", "Dan Federkeil", 72], ["OL", "Mike Pollak", 73], ["DL", "Dwight Freeney", 97], ["DL", "Robert Mathis", 92],
+     ["DL", "Raheem Brock", 84], ["DL", "Anthony McFarland", 86], ["DL", "Keyunta Dawson", 76], ["DL", "Ed Johnson", 78],
+     ["DL", "Darrell Reid", 74], ["DL", "Quinn Pitcock", 73], ["DL", "Tyjuan Hagler", 71], ["LB", "Gary Brackett", 89],
+     ["LB", "Cato June", 85], ["LB", "Rob Morris", 84], ["LB", "Freddy Keiaho", 78], ["LB", "Rocky Boiman", 74],
+     ["LB", "Tyjuan Hagler", 72], ["LB", "Clint Session", 76], ["CB", "Bob Sanders", 96], ["CB", "Nick Harper", 85],
+     ["CB", "Jason David", 81], ["CB", "Kelvin Hayden", 83], ["CB", "Marlin Jackson", 82], ["S", "Antoine Bethea", 87],
+     ["S", "Bob Sanders", 97], ["S", "Matt Giordano", 75], ["S", "Bronson Giordano", 72], ["K", "Adam Vinatieri", 92],
+     ["P", "Hunter Smith", 80], ["LS", "Justin Snow", 74],
+     ["QB", "Jim Sorgi", 74], ["RB", "Kenton Keith", 74], ["WR", "Roy Hall", 69], ["TE", "Bryan Fletcher", 70],
+     ["OL", "Charlie Johnson", 82], ["DL", "Dwight Freeney", 97], ["LB", "Gary Brackett", 89]
+   ]
+ },
+ "Jacksonville Jaguars": {
+   tag: "1999 AFC Championship run",
+   players: [
+     ["QB", "Mark Brunell", 91], ["RB", "Fred Taylor", 93], ["RB", "James Stewart", 82], ["WR", "Jimmy Smith", 94],
+     ["WR", "Keenan McCardell", 90], ["WR", "Reggie Barlow", 78], ["WR", "Alvis Whitted", 74], ["TE", "Kyle Brady", 82],
+     ["TE", "Damon Jones", 76], ["OL", "Tony Boselli", 97], ["OL", "Leon Searcy", 92], ["OL", "Ben Coleman", 84],
+     ["OL", "Michael Cheever", 82], ["OL", "Zach Wiegert", 86], ["OL", "John Wade", 80], ["OL", "Brian DeMarco", 78],
+     ["OL", "Todd Fordham", 75], ["OL", "Rich Tylski", 73], ["DL", "Tony Brackens", 92], ["DL", "Renaldo Wynn", 85],
+     ["DL", "Gary Walker", 88], ["DL", "Seth Payne", 82], ["DL", "Joel Smeenge", 80], ["DL", "Paul Frase", 76],
+     ["DL", "Kelvin Pritchett", 78], ["DL", "Larry Smith", 74], ["DL", "John Jurkovic", 75], ["LB", "Kevin Hardy", 91],
+     ["LB", "Lonnie Marts", 85], ["LB", "Tom McManus", 80], ["LB", "Brice Hunter", 74], ["LB", "Danny Clark", 76],
+     ["LB", "Gabe Northern", 72], ["LB", "Keenan McCardell", 70], ["CB", "Aaron Beasley", 87], ["CB", "Fernando Bryant", 84],
+     ["CB", "Deon Figures", 80], ["CB", "Dave Thomas", 79], ["CB", "Jason Craft", 76], ["S", "Donovin Darius", 88],
+     ["S", "Carnell Lake", 87], ["S", "Chris Hudson", 82], ["S", "Mike Logan", 78], ["K", "Mike Hollis", 85],
+     ["P", "Bryan Barker", 77], ["LS", "John Wade", 73],
+     ["QB", "Jay Fiedler", 75], ["RB", "Chris Howard", 71], ["WR", "Damon Gibson", 69], ["TE", "Rich Griffith", 68],
+     ["OL", "Tony Boselli", 97], ["DL", "Tony Brackens", 92], ["LB", "Kevin Hardy", 91]
+   ]
+ },
+ "Kansas City Chiefs": {
+   tag: "1969 Super Bowl IV champions",
+   players: [
+     ["QB", "Len Dawson", 94], ["RB", "Mike Garrett", 87], ["RB", "Robert Holmes", 86], ["WR", "Otis Taylor", 91],
+     ["WR", "Frank Pitts", 83], ["WR", "Gloster Richardson", 78], ["WR", "Bob Stein", 74], ["TE", "Fred Arbanas", 88],
+     ["TE", "Morris Stroud", 76], ["OL", "Jim Tyrer", 93], ["OL", "Ed Budde", 91], ["OL", "Dave Hill", 88],
+     ["OL", "Curley Culp", 87], ["OL", "E.J. Holub", 89], ["OL", "Mo Moorman", 84], ["OL", "George Daney", 78],
+     ["OL", "Remy Prudhomme", 73], ["OL", "Bill Budness", 71], ["DL", "Buck Buchanan", 96], ["DL", "Curley Culp", 92],
+     ["DL", "Aaron Brown", 84], ["DL", "Jerry Mays", 88], ["DL", "Wilbur Young", 80], ["DL", "Ernie Ladd", 89],
+     ["DL", "Chuck Hurston", 78], ["DL", "Willie Lanier", 97], ["DL", "Bobby Bell", 96], ["LB", "Willie Lanier", 98],
+     ["LB", "Bobby Bell", 97], ["LB", "Jim Lynch", 88], ["LB", "Mike Garrett", 82], ["LB", "Jim Kearney", 84],
+     ["LB", "Willie Mitchell", 81], ["LB", "Remi Prudhomme", 74], ["CB", "Emmitt Thomas", 93], ["CB", "Jim Marsalis", 86],
+     ["CB", "Mike Sensibaugh", 82], ["CB", "Goldie Sellers", 80], ["CB", "Noland Smith", 76], ["S", "Johnny Robinson", 94],
+     ["S", "Jim Kearney", 88], ["S", "Willie Lanier", 84], ["S", "Ceasar Belser", 78], ["K", "Jan Stenerud", 93],
+     ["P", "Jerrel Wilson", 84], ["LS", "E.J. Holub", 74],
+     ["QB", "Jacky Lee", 76], ["RB", "Wendell Hayes", 72], ["WR", "Gloster Richardson", 78], ["TE", "Billy Masters", 70],
+     ["OL", "Jim Tyrer", 93], ["DL", "Buck Buchanan", 96], ["LB", "Willie Lanier", 98]
+   ]
+ },
+ "Las Vegas Raiders": {
+   tag: "1983 Super Bowl XVIII champions",
+   players: [
+     ["QB", "Jim Plunkett", 92], ["RB", "Marcus Allen", 97], ["RB", "Kenny King", 84], ["WR", "Cliff Branch", 93],
+     ["WR", "Todd Christensen", 91], ["WR", "Malcolm Barnwell", 80], ["WR", "Dokie Williams", 76], ["TE", "Todd Christensen", 92],
+     ["TE", "Derrick Ramsey", 78], ["OL", "Art Shell", 96], ["OL", "Gene Upshaw", 95], ["OL", "Dave Dalby", 88],
+     ["OL", "Mickey Marvin", 86], ["OL", "Henry Lawrence", 89], ["OL", "Curt Marsh", 82], ["OL", "Bruce Davis", 79],
+     ["OL", "Don Mosebar", 84], ["OL", "Shelby Jordan", 76], ["DL", "Howie Long", 97], ["DL", "Greg Townsend", 91],
+     ["DL", "Lyle Alzado", 93], ["DL", "Reggie Kinlaw", 84], ["DL", "John Matuszak", 86], ["DL", "Bill Pickel", 83],
+     ["DL", "Mike Davis", 80], ["DL", "Rubin Carter", 78], ["DL", "Dave Browning", 76], ["LB", "Matt Millen", 91],
+     ["LB", "Rod Martin", 90], ["LB", "Ted Hendricks", 94], ["LB", "Bob Nelson", 82], ["LB", "Jeff Barnes", 79],
+     ["LB", "Rick Ackerman", 72], ["LB", "Jack Squirek", 75], ["CB", "Mike Haynes", 96], ["CB", "Lester Hayes", 95],
+     ["CB", "Ted Watts", 82], ["CB", "James Davis", 78], ["CB", "Odis McKinney", 76], ["S", "Vann McElroy", 89],
+     ["S", "Mike Davis", 86], ["S", "Burgess Owens", 84], ["S", "Rick Sanford", 74], ["K", "Chris Bahr", 84],
+     ["P", "Ray Guy", 94], ["LS", "Dave Dalby", 74],
+     ["QB", "Marc Wilson", 80], ["RB", "Greg Pruitt", 82], ["WR", "Calvin Muhammad", 72], ["TE", "Don Hasselbeck", 70],
+     ["OL", "Henry Lawrence", 89], ["DL", "Howie Long", 97], ["LB", "Matt Millen", 91]
+   ]
+ },
+ "Los Angeles Chargers": {
+   tag: "1994 AFC champions",
+   players: [
+     ["QB", "Stan Humphries", 89], ["RB", "Natrone Means", 91], ["RB", "Ronnie Harmon", 84], ["WR", "Tony Martin", 88],
+     ["WR", "Shawn Jefferson", 84], ["WR", "Mark Seay", 80], ["WR", "Andre Coleman", 76], ["TE", "Alfred Pupunu", 82],
+     ["TE", "Duane Young", 74], ["OL", "Harry Swayne", 86], ["OL", "Courtney Hall", 89], ["OL", "Joe Milinichik", 84],
+     ["OL", "Stan Brock", 85], ["OL", "Eric Moten", 82], ["OL", "Dennis McKnight", 80], ["OL", "Troy Sienkiewicz", 76],
+     ["OL", "Vaughn Parker", 78], ["OL", "Greg Engel", 72], ["DL", "Leslie O'Neal", 93], ["DL", "Chris Mims", 88],
+     ["DL", "Shawn Lee", 87], ["DL", "Reuben Davis", 84], ["DL", "Burt Grossman", 85], ["DL", "Ray Lee Johnson", 82],
+     ["DL", "Albert Fontenot", 76], ["DL", "Dennis Brown", 74], ["DL", "John Parrella", 80], ["LB", "Junior Seau", 99],
+     ["LB", "Gary Plummer", 88], ["LB", "Dwayne Gordon", 82], ["LB", "David Brandon", 76], ["LB", "Lewis Bush", 78],
+     ["LB", "Darren Carrington", 74], ["LB", "Pete Holohan", 70], ["CB", "Dwayne Harper", 85], ["CB", "Darrien Gordon", 87],
+     ["CB", "Willie Clark", 80], ["CB", "Deems May", 74], ["CB", "Stanley Richard", 82], ["S", "Rodney Harrison", 89],
+     ["S", "Darren Carrington", 84], ["S", "Bobby Taylor", 86], ["S", "Terrell Fletcher", 78], ["K", "John Carney", 87],
+     ["P", "Darren Bennett", 86], ["LS", "David Binn", 74],
+     ["QB", "Gale Gilbert", 76], ["RB", "Eric Bieniemy", 74], ["WR", "Vance Johnson", 80], ["TE", "Deems May", 70],
+     ["OL", "Stan Brock", 85], ["DL", "Leslie O'Neal", 93], ["LB", "Junior Seau", 99]
+   ]
+ },
+ "Los Angeles Rams": {
+   tag: "1999 Super Bowl XXXIV champions",
+   players: [
+     ["QB", "Kurt Warner", 97], ["RB", "Marshall Faulk", 99], ["RB", "Robert Holcombe", 80], ["WR", "Isaac Bruce", 95],
+     ["WR", "Torry Holt", 93], ["WR", "Az-Zahir Hakim", 84], ["WR", "Ricky Proehl", 82], ["TE", "Roland Williams", 82],
+     ["TE", "Ernie Conwell", 78], ["OL", "Orlando Pace", 97], ["OL", "Adam Timmerman", 89], ["OL", "Andy McCollum", 86],
+     ["OL", "Tom Nutten", 84], ["OL", "Fred Miller", 87], ["OL", "Ryan Tucker", 82], ["OL", "Cameron Spikes", 76],
+     ["OL", "John Flannery", 74], ["OL", "Zach Wiegert", 80], ["DL", "Kevin Carter", 92], ["DL", "Grant Wistrom", 90],
+     ["DL", "D'Marco Farr", 89], ["DL", "Ray Agnew", 84], ["DL", "Jeff Zgonina", 82], ["DL", "Leonard Little", 88],
+     ["DL", "Mike Morton", 76], ["DL", "Lionel Barnes", 74], ["DL", "Nate Hobgood-Chittick", 72], ["LB", "London Fletcher", 91],
+     ["LB", "Mike Jones", 88], ["LB", "Todd Collins", 84], ["LB", "Roman Phifer", 83], ["LB", "Charlie Clemons", 78],
+     ["LB", "Lorenzo Styles", 74], ["LB", "Dexter Coakley", 79], ["CB", "Todd Lyght", 89], ["CB", "Dre' Bly", 86],
+     ["CB", "Kevin Carter", 84], ["CB", "Dexter McCleon", 84], ["CB", "Clifton Crosby", 76], ["S", "Keith Lyle", 88],
+     ["S", "Billy Jenkins", 84], ["S", "Devin Bush", 82], ["S", "Rich Coady", 74], ["K", "Jeff Wilkins", 87],
+     ["P", "Mike Horan", 78], ["LS", "John Flannery", 72],
+     ["QB", "Trent Green", 82], ["RB", "Justin Watson", 72], ["WR", "Chris Thomas", 70], ["TE", "Jeff Robinson", 72],
+     ["OL", "Tom Nutten", 84], ["DL", "Kevin Carter", 92], ["LB", "London Fletcher", 91]
+   ]
+ },
+ "Miami Dolphins": {
+   tag: "1972 perfect season",
+   players: [
+     ["QB", "Bob Griese", 94], ["RB", "Larry Csonka", 97], ["RB", "Mercury Morris", 89], ["WR", "Paul Warfield", 95],
+     ["WR", "Howard Twilley", 83], ["WR", "Marlin Briscoe", 80], ["WR", "Jim Kiick", 82], ["TE", "Marv Fleming", 84],
+     ["TE", "Jim Mandich", 80], ["OL", "Larry Little", 96], ["OL", "Jim Langer", 95], ["OL", "Bob Kuechenberg", 93],
+     ["OL", "Norm Evans", 88], ["OL", "Wayne Moore", 86], ["OL", "Doug Crusan", 84], ["OL", "Mike Kolen", 78],
+     ["OL", "Al Jenkins", 74], ["OL", "Garrett Giemont", 71], ["DL", "Bill Stanfill", 93], ["DL", "Vern Den Herder", 88],
+     ["DL", "Manny Fernandez", 91], ["DL", "Bob Heinz", 84], ["DL", "Dick Anderson", 90], ["DL", "Nick Buoniconti", 96],
+     ["DL", "Doug Swift", 82], ["DL", "Jesse Powell", 76], ["DL", "Mike Kadish", 74], ["LB", "Nick Buoniconti", 97],
+     ["LB", "Doug Swift", 88], ["LB", "Mike Kolen", 85], ["LB", "Bob Matheson", 86], ["LB", "Charlie Babb", 82],
+     ["LB", "Jesse Powell", 78], ["LB", "Larry Ball", 74], ["CB", "Tim Foley", 88], ["CB", "Curtis Johnson", 89],
+     ["CB", "Lloyd Mumphord", 84], ["CB", "Henry Stuckey", 78], ["CB", "Charles Babb", 76], ["S", "Jake Scott", 94],
+     ["S", "Dick Anderson", 95], ["S", "Mike Howell", 82], ["S", "Charlie Babb", 80], ["K", "Garo Yepremian", 86],
+     ["P", "Larry Seiple", 82], ["LS", "Marv Fleming", 74],
+     ["QB", "Earl Morrall", 85], ["RB", "Jim Kiick", 82], ["WR", "Otto Stowe", 72], ["TE", "Stan Mitchell", 70],
+     ["OL", "Larry Little", 96], ["DL", "Bill Stanfill", 93], ["LB", "Nick Buoniconti", 97]
+   ]
+ },
+ "Minnesota Vikings": {
+   tag: "1998 NFC Championship run",
+   players: [
+     ["QB", "Randall Cunningham", 94], ["RB", "Robert Smith", 92], ["RB", "Moe Williams", 80], ["WR", "Randy Moss", 99],
+     ["WR", "Cris Carter", 96], ["WR", "Jake Reed", 85], ["WR", "Matthew Hatchette", 76], ["TE", "Andrew Glover", 82],
+     ["TE", "Hunter Goodwin", 74], ["OL", "Korey Stringer", 92], ["OL", "Randall McDaniel", 96], ["OL", "Jeff Christy", 89],
+     ["OL", "Todd Steussie", 90], ["OL", "David Dixon", 85], ["OL", "Dixon Edwards", 80], ["OL", "Matt Birk", 84],
+     ["OL", "Chris Liwienski", 76], ["OL", "Mike Morris", 73], ["DL", "John Randle", 97], ["DL", "Alan Page", 96],
+     ["DL", "Chris Doleman", 94], ["DL", "Jerry Ball", 90], ["DL", "Henry Thomas", 88], ["DL", "Tony Williams", 84],
+     ["DL", "Derrick Alexander", 86], ["DL", "Fernando Smith", 78], ["DL", "Stalin Colinet", 76], ["LB", "Ed McDaniel", 88],
+     ["LB", "Dwayne Rudd", 85], ["LB", "Jeff Brady", 82], ["LB", "Pete Bercich", 76], ["LB", "Kailee Wong", 80],
+     ["LB", "Dixon Edwards", 78], ["LB", "Jim Kitts", 70], ["CB", "Corey Fuller", 89], ["CB", "Jimmy Hitchcock", 86],
+     ["CB", "Robert Tate", 82], ["CB", "Ramos McDonald", 78], ["CB", "Antonio Banks", 76], ["S", "Robert Griffith", 88],
+     ["S", "Orlando Thomas", 87], ["S", "Torrian Gray", 80], ["S", "Duane Butler", 74], ["K", "Gary Anderson", 91],
+     ["P", "Mitch Berger", 82], ["LS", "Matt Birk", 74],
+     ["QB", "Brad Johnson", 84], ["RB", "Leroy Hoard", 80], ["WR", "David Palmer", 72], ["TE", "John Davis", 70],
+     ["OL", "Todd Steussie", 90], ["DL", "John Randle", 97], ["LB", "Ed McDaniel", 88]
+   ]
+ },
+ "New England Patriots": {
+   tag: "2004 Super Bowl XXXIX champions",
+   players: [
+     ["QB", "Tom Brady", 97], ["RB", "Corey Dillon", 92], ["RB", "Kevin Faulk", 85], ["WR", "Deion Branch", 88],
+     ["WR", "David Givens", 86], ["WR", "Troy Brown", 84], ["WR", "David Patten", 82], ["TE", "Daniel Graham", 86],
+     ["TE", "Christian Fauria", 80], ["OL", "Matt Light", 90], ["OL", "Joe Andruzzi", 87], ["OL", "Dan Koppen", 89],
+     ["OL", "Damien Woody", 88], ["OL", "Tom Ashworth", 82], ["OL", "Russ Hochstein", 80], ["OL", "Brandon Gorin", 78],
+     ["OL", "Stephen Neal", 84], ["OL", "Adrian Klemm", 76], ["DL", "Richard Seymour", 96], ["DL", "Ty Warren", 89],
+     ["DL", "Vince Wilfork", 91], ["DL", "Jarvis Green", 83], ["DL", "Rodney Bailey", 76], ["DL", "Marquise Hill", 74],
+     ["DL", "Ethan Kelley", 72], ["DL", "Mike Wright", 78], ["DL", "Kyle Love", 74], ["LB", "Tedy Bruschi", 94],
+     ["LB", "Mike Vrabel", 91], ["LB", "Willie McGinest", 90], ["LB", "Roman Phifer", 85], ["LB", "Ted Johnson", 86],
+     ["LB", "Rosevelt Colvin", 87], ["LB", "Matt Chatham", 76], ["CB", "Ty Law", 95], ["CB", "Asante Samuel", 89],
+     ["CB", "Randall Gay", 84], ["CB", "Hank Poteat", 78], ["CB", "Tyrone Poole", 80], ["S", "Rodney Harrison", 93],
+     ["S", "Eugene Wilson", 86], ["S", "Dexter Reid", 80], ["S", "Guss Scott", 74], ["K", "Adam Vinatieri", 93],
+     ["P", "Josh Miller", 80], ["LS", "Lonie Paxton", 74],
+     ["QB", "Rohan Davey", 74], ["RB", "Patrick Pass", 76], ["WR", "Bethel Johnson", 74], ["TE", "Ben Watson", 80],
+     ["OL", "Matt Light", 90], ["DL", "Richard Seymour", 96], ["LB", "Tedy Bruschi", 94]
+   ]
+ },
+ "New Orleans Saints": {
+   tag: "2009 Super Bowl XLIV champions",
+   players: [
+     ["QB", "Drew Brees", 98], ["RB", "Pierre Thomas", 88], ["RB", "Reggie Bush", 86], ["WR", "Marques Colston", 92],
+     ["WR", "Devery Henderson", 84], ["WR", "Robert Meachem", 85], ["WR", "Lance Moore", 83], ["TE", "Jeremy Shockey", 88],
+     ["TE", "David Thomas", 80], ["OL", "Jermon Bushrod", 87], ["OL", "Jahri Evans", 94], ["OL", "Jonathan Goodwin", 86],
+     ["OL", "Carl Nicks", 91], ["OL", "Jon Stinchcomb", 88], ["OL", "Zach Strief", 82], ["OL", "Jammal Brown", 84],
+     ["OL", "Nick Leckey", 76], ["OL", "Tim Duckworth", 72], ["DL", "Will Smith", 89], ["DL", "Charles Grant", 87],
+     ["DL", "Sedrick Ellis", 86], ["DL", "Kendrick Clancy", 82], ["DL", "Bobby McCray", 84], ["DL", "Anthony Hargrove", 80],
+     ["DL", "Remi Ayodele", 76], ["DL", "DeMario Pressley", 74], ["DL", "Jeff Charleston", 72], ["LB", "Jonathan Vilma", 93],
+     ["LB", "Scott Fujita", 86], ["LB", "Scott Shanle", 84], ["LB", "Marvin Mitchell", 78], ["LB", "Jo-Lonn Dunbar", 76],
+     ["LB", "Troy Evans", 74], ["LB", "Stanley Arnoux", 70], ["CB", "Jabari Greer", 89], ["CB", "Tracy Porter", 87],
+     ["CB", "Randall Gay", 83], ["CB", "Malcolm Jenkins", 86], ["CB", "Leigh Torrence", 78], ["S", "Darren Sharper", 92],
+     ["S", "Roman Harper", 88], ["S", "Usama Young", 78], ["S", "Pierson Prioleau", 74], ["K", "Garrett Hartley", 85],
+     ["P", "Thomas Morstead", 88], ["LS", "Jason Kyle", 74],
+     ["QB", "Mark Brunell", 76], ["RB", "Mike Bell", 80], ["WR", "Courtney Roby", 70], ["TE", "Darnell Dinkins", 72],
+     ["OL", "Jermon Bushrod", 87], ["DL", "Will Smith", 89], ["LB", "Jonathan Vilma", 93]
+   ]
+ },
+ "New York Giants": {
+   tag: "2007 Super Bowl XLII champions",
+   players: [
+     ["QB", "Eli Manning", 92], ["RB", "Brandon Jacobs", 89], ["RB", "Ahmad Bradshaw", 84], ["WR", "Plaxico Burress", 92],
+     ["WR", "Amani Toomer", 86], ["WR", "Steve Smith", 84], ["WR", "David Tyree", 80], ["TE", "Jeremy Shockey", 89],
+     ["TE", "Kevin Boss", 82], ["OL", "David Diehl", 88], ["OL", "Rich Seubert", 86], ["OL", "Shaun O'Hara", 88],
+     ["OL", "Chris Snee", 91], ["OL", "Kareem McKenzie", 89], ["OL", "Guy Whimper", 76], ["OL", "Kevin Boothe", 78],
+     ["OL", "Adam Koets", 72], ["OL", "Grey Ruegamer", 74], ["DL", "Michael Strahan", 97], ["DL", "Osi Umenyiora", 94],
+     ["DL", "Justin Tuck", 92], ["DL", "Barry Cofield", 86], ["DL", "Fred Robbins", 87], ["DL", "Mathias Kiwanuka", 88],
+     ["DL", "Jay Alford", 78], ["DL", "Dave Tollefson", 76], ["DL", "Renaldo Wynn", 82], ["LB", "Antonio Pierce", 92],
+     ["LB", "Kawika Mitchell", 85], ["LB", "Reggie Torbor", 80], ["LB", "Mathias Kiwanuka", 88], ["LB", "Chase Blackburn", 78],
+     ["LB", "Gerris Wilkinson", 74], ["LB", "Zak DeOssie", 76], ["CB", "Sam Madison", 88], ["CB", "Corey Webster", 90],
+     ["CB", "Aaron Ross", 85], ["CB", "R.W. McQuarters", 82], ["CB", "Kevin Dockery", 76], ["S", "James Butler", 86],
+     ["S", "Gibril Wilson", 89], ["S", "Michael Johnson", 82], ["S", "Craig Dahl", 74], ["K", "Lawrence Tynes", 84],
+     ["P", "Jeff Feagles", 83], ["LS", "Jay Alford", 72],
+     ["QB", "Jared Lorenzen", 74], ["RB", "Reuben Droughns", 78], ["WR", "Sinorice Moss", 72], ["TE", "Darcy Johnson", 70],
+     ["OL", "David Diehl", 88], ["DL", "Michael Strahan", 97], ["LB", "Antonio Pierce", 92]
+   ]
+ },
+ "New York Jets": {
+   tag: "1968 Super Bowl III champions",
+   players: [
+     ["QB", "Joe Namath", 97], ["RB", "Matt Snell", 91], ["RB", "Emerson Boozer", 87], ["WR", "Don Maynard", 95],
+     ["WR", "George Sauer", 89], ["WR", "Bake Turner", 80], ["WR", "Wayne Stewart", 74], ["TE", "Pete Lammons", 84],
+     ["TE", "Mark Smolinski", 78], ["OL", "Winston Hill", 94], ["OL", "John Schmitt", 90], ["OL", "Dave Herman", 88],
+     ["OL", "Sam DeLuca", 85], ["OL", "Sherman Plunkett", 84], ["OL", "Bob Talamini", 86], ["OL", "Randy Beverly", 82],
+     ["OL", "Paul Crane", 76], ["OL", "John Elliott", 74], ["DL", "Gerry Philbin", 93], ["DL", "Verlon Biggs", 90],
+     ["DL", "John Elliott", 87], ["DL", "Paul Rochester", 84], ["DL", "Steve Thompson", 82], ["DL", "Mark Lomas", 76],
+     ["DL", "Carl McAdams", 74], ["DL", "Ralph Baker", 80], ["DL", "Al Atkinson", 82], ["LB", "Larry Grantham", 94],
+     ["LB", "Al Atkinson", 88], ["LB", "Ralph Baker", 86], ["LB", "Jim Hudson", 84], ["LB", "Mike D'Amato", 76],
+     ["LB", "John Neidert", 72], ["LB", "Cornell Gordon", 70], ["CB", "Johnny Sample", 88], ["CB", "Randy Beverly", 85],
+     ["CB", "Earlie Thomas", 82], ["CB", "Cornell Gordon", 78], ["CB", "Cliff McClain", 74], ["S", "Jim Hudson", 89],
+     ["S", "Bill Baird", 87], ["S", "Mike D'Amato", 82], ["S", "Ken Schroy", 76], ["K", "Jim Turner", 86],
+     ["P", "Curley Johnson", 82], ["LS", "John Schmitt", 74],
+     ["QB", "Babe Parilli", 78], ["RB", "Bill Mathis", 82], ["WR", "George Sauer", 89], ["TE", "Pete Lammons", 84],
+     ["OL", "Winston Hill", 94], ["DL", "Gerry Philbin", 93], ["LB", "Larry Grantham", 94]
+   ]
+ },
+ "Philadelphia Eagles": {
+   tag: "2017 Super Bowl LII champions",
+   players: [
+     ["QB", "Carson Wentz", 92], ["RB", "LeGarrette Blount", 86], ["RB", "Jay Ajayi", 85], ["WR", "Alshon Jeffery", 89],
+     ["WR", "Nelson Agholor", 85], ["WR", "Torrey Smith", 82], ["WR", "Mack Hollins", 76], ["TE", "Zach Ertz", 92],
+     ["TE", "Trey Burton", 82], ["OL", "Jason Peters", 94], ["OL", "Lane Johnson", 93], ["OL", "Jason Kelce", 92],
+     ["OL", "Brandon Brooks", 91], ["OL", "Stefen Wisniewski", 84], ["OL", "Halapoulivaati Vaitai", 80], ["OL", "Isaac Seumalo", 78],
+     ["OL", "Chance Warmack", 76], ["OL", "Big V", 80], ["DL", "Fletcher Cox", 96], ["DL", "Brandon Graham", 92],
+     ["DL", "Vinny Curry", 85], ["DL", "Tim Jernigan", 86], ["DL", "Beau Allen", 80], ["DL", "Derek Barnett", 84],
+     ["DL", "Chris Long", 88], ["DL", "Destiny Vaeao", 74], ["DL", "Elijah Qualls", 72], ["LB", "Nigel Bradham", 89],
+     ["LB", "Mychal Kendricks", 87], ["LB", "Jordan Hicks", 86], ["LB", "Kamu Grugier-Hill", 78], ["LB", "Najee Goode", 76],
+     ["LB", "Joe Walker", 72], ["LB", "Nathan Gerry", 74], ["CB", "Ronald Darby", 88], ["CB", "Jalen Mills", 84],
+     ["CB", "Patrick Robinson", 86], ["CB", "Rasul Douglas", 78], ["CB", "Sidney Jones", 76], ["S", "Malcolm Jenkins", 93],
+     ["S", "Rodney McLeod", 87], ["S", "Corey Graham", 82], ["S", "Chris Maragos", 76], ["K", "Jake Elliott", 87],
+     ["P", "Donnie Jones", 80], ["LS", "Rick Lovato", 74],
+     ["QB", "Nick Foles", 88], ["RB", "Corey Clement", 80], ["WR", "Marcus Johnson", 70], ["TE", "Brent Celek", 78],
+     ["OL", "Jason Peters", 94], ["DL", "Fletcher Cox", 96], ["LB", "Nigel Bradham", 89]
+   ]
+ },
+ "Pittsburgh Steelers": {
+   tag: "1978 Super Bowl XIII champions",
+   players: [
+     ["QB", "Terry Bradshaw", 96], ["RB", "Franco Harris", 95], ["RB", "Rocky Bleier", 86], ["WR", "Lynn Swann", 95],
+     ["WR", "John Stallworth", 93], ["WR", "Theo Bell", 82], ["WR", "Jim Smith", 78], ["TE", "Bennie Cunningham", 86],
+     ["TE", "Randy Grossman", 80], ["OL", "Jon Kolb", 92], ["OL", "Mike Webster", 97], ["OL", "Gerry Mullins", 88],
+     ["OL", "Sam Davis", 86], ["OL", "Larry Brown", 85], ["OL", "Ray Mansfield", 88], ["OL", "Steve Courson", 82],
+     ["OL", "Tom Beasley", 76], ["OL", "John Banaszak", 74], ["DL", "Mean Joe Greene", 99], ["DL", "L.C. Greenwood", 95],
+     ["DL", "Ernie Holmes", 91], ["DL", "Dwight White", 93], ["DL", "Steve Furness", 84], ["DL", "Gary Dunn", 80],
+     ["DL", "Tom Beasley", 78], ["DL", "John Banaszak", 76], ["DL", "Joe Greene", 98], ["LB", "Jack Lambert", 99],
+     ["LB", "Jack Ham", 97], ["LB", "Andy Russell", 92], ["LB", "Loren Toews", 85], ["LB", "Robin Cole", 86],
+     ["LB", "Dirt Winston", 80], ["LB", "Dennis Winston", 74], ["CB", "Mel Blount", 97], ["CB", "Ron Johnson", 85],
+     ["CB", "J.T. Thomas", 84], ["CB", "Jimmy Allen", 80], ["CB", "Dwayne Woodruff", 82], ["S", "Mike Wagner", 91],
+     ["S", "Donnie Shell", 93], ["S", "Glen Edwards", 85], ["S", "Wentford Gaines", 74], ["K", "Roy Gerela", 85],
+     ["P", "Craig Colquitt", 83], ["LS", "Mike Webster", 74],
+     ["QB", "Cliff Stoudt", 76], ["RB", "Sidney Thornton", 78], ["WR", "Calvin Sweeney", 72], ["TE", "Randy Grossman", 80],
+     ["OL", "Mike Webster", 97], ["DL", "Mean Joe Greene", 99], ["LB", "Jack Lambert", 99]
+   ]
+ },
+ "San Francisco 49ers": {
+   tag: "1989 Super Bowl XXIV champions",
+   players: [
+     ["QB", "Joe Montana", 99], ["RB", "Roger Craig", 93], ["RB", "Tom Rathman", 86], ["WR", "Jerry Rice", 99],
+     ["WR", "John Taylor", 89], ["WR", "Mike Wilson", 80], ["WR", "Terry Greer", 76], ["TE", "Brent Jones", 87],
+     ["TE", "Jamie Williams", 82], ["OL", "Harris Barton", 90], ["OL", "Jesse Sapolu", 92], ["OL", "Guy McIntyre", 89],
+     ["OL", "Steve Wallace", 88], ["OL", "Bubba Paris", 87], ["OL", "Bruce Collie", 80], ["OL", "Randy Robbins", 78],
+     ["OL", "Harry Sydney", 76], ["OL", "Chuck Thomas", 74], ["DL", "Charles Haley", 94], ["DL", "Pierce Holt", 88],
+     ["DL", "Michael Carter", 92], ["DL", "Kevin Fagan", 86], ["DL", "Pete Kugler", 80], ["DL", "Larry Roberts", 84],
+     ["DL", "Bill Romanowski", 82], ["DL", "Jim Burt", 86], ["DL", "Dennis Brown", 78], ["LB", "Keena Turner", 88],
+     ["LB", "Charles Haley", 93], ["LB", "Matt Millen", 91], ["LB", "Bill Romanowski", 86], ["LB", "Michael Walter", 80],
+     ["LB", "Rickey Dixon", 76], ["LB", "Keith DeLong", 74], ["CB", "Ronnie Lott", 98], ["CB", "Eric Wright", 90],
+     ["CB", "Don Griffin", 86], ["CB", "Darryl Pollard", 80], ["CB", "Kevin Lewis", 74], ["S", "Ronnie Lott", 98],
+     ["S", "Chet Brooks", 86], ["S", "Dave Waymer", 89], ["S", "Jeff Fuller", 78], ["K", "Mike Cofer", 86],
+     ["P", "Barry Helton", 82], ["LS", "Brent Jones", 74],
+     ["QB", "Steve Young", 91], ["RB", "Dexter Carter", 80], ["WR", "Mike Sherrard", 78], ["TE", "Wes Walls", 70],
+     ["OL", "Harris Barton", 90], ["DL", "Charles Haley", 94], ["LB", "Keena Turner", 88]
+   ]
+ },
+ "Seattle Seahawks": {
+   tag: "2013 Super Bowl XLVIII champions",
+   players: [
+     ["QB", "Russell Wilson", 92], ["RB", "Marshawn Lynch", 95], ["RB", "Robert Turbin", 80], ["WR", "Golden Tate", 87],
+     ["WR", "Doug Baldwin", 88], ["WR", "Jermaine Kearse", 82], ["WR", "Ricardo Lockette", 74], ["TE", "Zach Miller", 86],
+     ["TE", "Luke Willson", 78], ["OL", "Russell Okung", 90], ["OL", "Max Unger", 89], ["OL", "Breno Giacomini", 86],
+     ["OL", "J.R. Sweezy", 84], ["OL", "Paul McQuistan", 80], ["OL", "Michael Bowie", 76], ["OL", "Alvin Bailey", 78],
+     ["OL", "Lemuel Jeanpierre", 74], ["OL", "Caylin Hauptmann", 72], ["DL", "Michael Bennett", 93], ["DL", "Cliff Avril", 90],
+     ["DL", "Brandon Mebane", 87], ["DL", "Red Bryant", 86], ["DL", "Tony McDaniel", 83], ["DL", "Clinton McDonald", 85],
+     ["DL", "Jordan Hill", 78], ["DL", "Greg Scruggs", 74], ["DL", "Benson Mayowa", 76], ["LB", "Bobby Wagner", 95],
+     ["LB", "K.J. Wright", 90], ["LB", "Bruce Irvin", 86], ["LB", "Malcolm Smith", 84], ["LB", "Heath Farwell", 76],
+     ["LB", "Mike Morgan", 74], ["LB", "O'Brien Schofield", 78], ["CB", "Richard Sherman", 98], ["CB", "Brandon Browner", 89],
+     ["CB", "Byron Maxwell", 84], ["CB", "Walter Thurmond", 86], ["CB", "Jeremy Lane", 78], ["S", "Earl Thomas", 97],
+     ["S", "Kam Chancellor", 95], ["S", "Chris Maragos", 76], ["S", "Jeron Johnson", 74], ["K", "Steven Hauschka", 89],
+     ["P", "Jon Ryan", 85], ["LS", "Clint Gresham", 74],
+     ["QB", "Tarvaris Jackson", 76], ["RB", "Christine Michael", 78], ["WR", "Bryan Walters", 70], ["TE", "Kellen Davis", 72],
+     ["OL", "Russell Okung", 90], ["DL", "Michael Bennett", 93], ["LB", "Bobby Wagner", 95]
+   ]
+ },
+ "Tampa Bay Buccaneers": {
+   tag: "2002 Super Bowl XXXVII champions",
+   players: [
+     ["QB", "Brad Johnson", 89], ["RB", "Michael Pittman", 86], ["RB", "Mike Alstott", 88], ["WR", "Keyshawn Johnson", 92],
+     ["WR", "Keenan McCardell", 90], ["WR", "Joe Jurevicius", 84], ["WR", "Karl Williams", 78], ["TE", "Ken Dilger", 85],
+     ["TE", "Rickey Dudley", 80], ["OL", "Roman Oben", 87], ["OL", "Kerry Jenkins", 86], ["OL", "Jeff Christy", 88],
+     ["OL", "Cosey Coleman", 84], ["OL", "Kenyal Dyer", 80], ["OL", "Todd Washington", 78], ["OL", "Lomas Brown", 82],
+     ["OL", "Cornell Green", 76], ["OL", "Aaron Gibson", 74], ["DL", "Simeon Rice", 95], ["DL", "Warren Sapp", 97],
+     ["DL", "Greg Spires", 84], ["DL", "Booger McFarland", 86], ["DL", "Chartric Darby", 80], ["DL", "Corey Smith", 78],
+     ["DL", "Ellis Wyms", 76], ["DL", "John McLaughlin", 72], ["DL", "Marcus Jones", 84], ["LB", "Derrick Brooks", 98],
+     ["LB", "Shelton Quarles", 88], ["LB", "Al Singleton", 84], ["LB", "Nate Webster", 82], ["LB", "Jack Golden", 74],
+     ["LB", "Ryan Nece", 76], ["LB", "Justin Smith", 70], ["CB", "Ronde Barber", 96], ["CB", "Brian Kelly", 88],
+     ["CB", "Dwight Smith", 86], ["CB", "Tim Wansley", 78], ["CB", "Corey Ivy", 76], ["S", "John Lynch", 96],
+     ["S", "Dexter Jackson", 89], ["S", "Jermaine Phillips", 80], ["S", "David Gibson", 74], ["K", "Martin Gramatica", 86],
+     ["P", "Tom Tupa", 83], ["LS", "Dave Moore", 74],
+     ["QB", "Shaun King", 76], ["RB", "Aaron Stecker", 74], ["WR", "Marquise Walker", 70], ["TE", "Todd Yoder", 72],
+     ["OL", "Roman Oben", 87], ["DL", "Simeon Rice", 95], ["LB", "Derrick Brooks", 98]
+   ]
+ },
+ "Tennessee Titans": {
+   tag: "1999 AFC champions",
+   players: [
+     ["QB", "Steve McNair", 94], ["RB", "Eddie George", 96], ["RB", "Rodney Thomas", 80], ["WR", "Yancey Thigpen", 86],
+     ["WR", "Kevin Dyson", 84], ["WR", "Isaac Byrd", 80], ["WR", "Derrick Mason", 82], ["TE", "Frank Wycheck", 89],
+     ["TE", "Jackie Harris", 80], ["OL", "Brad Hopkins", 89], ["OL", "Bruce Matthews", 96], ["OL", "Kevin Long", 86],
+     ["OL", "Benji Olson", 85], ["OL", "Jon Runyan", 87], ["OL", "Zach Piller", 82], ["OL", "Jason Layman", 78],
+     ["OL", "Scott Sanderson", 80], ["OL", "Craig Hentrich", 76], ["DL", "Jevon Kearse", 96], ["DL", "Kenny Holmes", 88],
+     ["DL", "Jason Fisk", 84], ["DL", "Josh Evans", 86], ["DL", "Henry Ford", 82], ["DL", "Derrick Mason", 78],
+     ["DL", "John Thornton", 80], ["DL", "Joe Salave'a", 76], ["DL", "James Logan", 74], ["LB", "Eddie Robinson", 91],
+     ["LB", "Randall Godfrey", 87], ["LB", "Barron Wortham", 84], ["LB", "Greg Favors", 80], ["LB", "Joe Bowden", 82],
+     ["LB", "Terry Killens", 74], ["LB", "Dainon Sidney", 70], ["CB", "Samari Rolle", 93], ["CB", "Dainon Sidney", 86],
+     ["CB", "Denard Walker", 88], ["CB", "Donald Mitchell", 82], ["CB", "Andre Dyson", 84], ["S", "Blaine Bishop", 92],
+     ["S", "Marcus Robertson", 89], ["S", "Anthony Dorsett", 82], ["S", "Perry Phenix", 74], ["K", "Al Del Greco", 86],
+     ["P", "Craig Hentrich", 88], ["LS", "Frank Wycheck", 74],
+     ["QB", "Neil O'Donnell", 80], ["RB", "Spencer George", 72], ["WR", "Chris Sanders", 78], ["TE", "Michael Roan", 70],
+     ["OL", "Brad Hopkins", 89], ["DL", "Jevon Kearse", 96], ["LB", "Eddie Robinson", 91]
+   ]
+ },
+ "Washington Commanders": {
+   tag: "1982 Super Bowl XVII champions",
+   players: [
+     ["QB", "Joe Theismann", 92], ["RB", "John Riggins", 97], ["RB", "Joe Washington", 86], ["WR", "Art Monk", 93],
+     ["WR", "Charlie Brown", 89], ["WR", "Alvin Garrett", 80], ["WR", "Virgil Seay", 76], ["TE", "Don Warren", 84],
+     ["TE", "Rick Walker", 78], ["OL", "Joe Jacoby", 95], ["OL", "Russ Grimm", 94], ["OL", "Jeff Bostic", 89],
+     ["OL", "George Starke", 90], ["OL", "Mark May", 88], ["OL", "Fred Dean", 84], ["OL", "Ron Saul", 80],
+     ["OL", "Bob Kuziel", 74], ["OL", "Dan McQuaid", 72], ["DL", "Dave Butz", 94], ["DL", "Dexter Manley", 93],
+     ["DL", "Charles Mann", 90], ["DL", "Mat Mendenhall", 84], ["DL", "Darryl Grant", 88], ["DL", "Perry Brooks", 86],
+     ["DL", "Tony McGee", 82], ["DL", "Wilbur Young", 78], ["DL", "Tom Beasley", 76], ["LB", "Rich Milot", 88],
+     ["LB", "Neal Olkewicz", 87], ["LB", "Monte Coleman", 90], ["LB", "Mel Kaufman", 86], ["LB", "Larry Kubin", 80],
+     ["LB", "Pete Cronan", 74], ["LB", "Angelo Fields", 70], ["CB", "Darrell Green", 98], ["CB", "Vernon Dean", 88],
+     ["CB", "Jeris White", 86], ["CB", "Mike Nelms", 80], ["CB", "Tony Peters", 82], ["S", "Mark Murphy", 89],
+     ["S", "Tony Peters", 90], ["S", "Ken Coffey", 84], ["S", "Greg Williams", 76], ["K", "Mark Moseley", 90],
+     ["P", "Mike Bragg", 80], ["LS", "Don Warren", 74],
+     ["QB", "Joe Theismann", 92], ["RB", "John Riggins", 97], ["WR", "Art Monk", 93], ["TE", "Don Warren", 84],
+     ["OL", "Joe Jacoby", 95], ["DL", "Dave Butz", 94], ["LB", "Rich Milot", 88]
+   ]
+ }
+};
+/* ------------------------------------------------------------------------------------ */
+var FN=["Jalen","Marcus","Devin","Tyrone","Caleb","Isaiah","Mason","Elijah","Trevor","Brandon","Darius","Cole","Landon","Xavier","Jordan","Terrell","Micah","Andre","Colton","Rashad","Gavin","Dante","Tyler","Kendrick"];
+var LN=["Johnson","Williams","Carter","Brooks","Hayes","Mitchell","Jefferson","Coleman","Reed","Bennett","Foster","Powell","Sanders","Ward","Price","Hughes","Barnes","Fields","Thompson","Gaines","Dixon","Pierce","Holloway","Whitaker","Boyd","Ramsey","Lawson","Monroe"];
+var CI=["Arizona","Atlanta","Baltimore","Buffalo","Carolina","Chicago","Cincinnati","Cleveland","Dallas","Denver","Detroit","Green Bay","Houston","Indianapolis","Jacksonville","Kansas City","Las Vegas","Los Angeles","Los Angeles","Miami","Minnesota","New England","New Orleans","New York","New York","Philadelphia","Pittsburgh","San Francisco","Seattle","Tampa Bay","Tennessee","Washington"];
+var NK=["Cardinals","Falcons","Ravens","Bills","Panthers","Bears","Bengals","Browns","Cowboys","Broncos","Lions","Packers","Texans","Colts","Jaguars","Chiefs","Raiders","Chargers","Rams","Dolphins","Vikings","Patriots","Saints","Giants","Jets","Eagles","Steelers","49ers","Seahawks","Buccaneers","Titans","Commanders"];
+var POS=[["QB",3],["RB",4],["WR",6],["TE",3],["OL",9],["DL",9],["LB",7],["CB",5],["S",4],["K",1],["P",1],["LS",1]],PI={};POS.forEach(function(g,i){PI[g[0]]=i});
+var U={QB:[1,.04],RB:[.6,.3,.12,.05],WR:[1,.85,.65,.3,.1,.05],TE:[1,.4,.1],OL:[1,1,1,1,1,.4,.2,.1,.05],DL:[1,.95,.9,.8,.4,.3,.15,.1,.05],LB:[1,.95,.8,.5,.3,.15,.1],CB:[1,.95,.75,.35,.15],S:[1,.9,.45,.15],K:[1],P:[1],LS:[0]};
+var SW={QB:[3.2],RB:[.8],WR:[.7,.6,.5],TE:[.5],OL:[.7,.7,.7,.7,.7],DL:[.9,.8,.8,.7],LB:[.6,.5,.5],CB:[.7,.6,.5],S:[.6,.5],K:[.4],P:[.2]},SWS=0;
+for(var k in SW)SW[k].forEach(function(w){SWS+=w});
+var PV={QB:6,RB:0,WR:2,TE:0,OL:1,DL:2,LB:0,CB:1,S:0,K:-14,P:-16,LS:-30};
+var ST=[["py","Pass yards","pass yds"],["pt","Pass TD","pass TD"],["pi","Interceptions thrown","INT thrown"],["ry","Rush yards","rush yds"],["rt","Rush TD","rush TD"],["rc","Receptions","rec"],["rv","Receiving yards","rec yds"],["rtd","Receiving TD","rec TD"],["sk","Sacks","sacks"],["tk","Tackles","tackles"],["di","Interceptions","INT"],["fg","Field goals","FG"]];
+var TABS=[["teams","Teams"],["lead","Leaders"],["top","Top 100"],["pls","Players"],["new","Create player"],["hof","Hall of Fame"],["log","Season log"]];
+var HOFT=180,S,tab="teams",sc="s",st="py",cf="all",ed=null,sel=null,pl=null,q="";
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function fmt(v){return(+v).toLocaleString()}
+function T(i){return CI[i]+" "+NK[i]}function Tn(i){return i>=0?NK[i]:"Retired"}
+function hf(p){return Math.round(p.av+p.t10*5+p.mvp*12+p.rg*3)}
+function fp(id){var a=S.p.concat(S.ret);for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i]}
+function sline(s){return ST.filter(function(x){return s[x[0]]}).map(function(x){return fmt(s[x[0]])+" "+x[2]}).join(", ")}
+function mk(pos,d,t,rk,legendName,legendOvr){var age=legendOvr?rnd(24,32):(rk?rnd(21,23):rnd(21,36));
+ var o=legendOvr?clamp(legendOvr+rnd(-2,2),70,99):(rk?52+rnd(0,22):clamp(Math.round(78-d*3.4+rnd(-9,9)+(age<24?-4:0)),42,96));
+ var name=legendName||(FN[rnd(0,FN.length-1)]+" "+LN[rnd(0,LN.length-1)]);
+ return{id:S.nid++,n:name,pos:pos,age:age,ovr:o,pot:clamp(o+(rk?rnd(2,16):age<27?rnd(0,10):0),o,99),t:t,s:{},c:{},L:[],av:0,t10:0,mvp:0,rg:0}}
+function fresh(){
+ S={season:1,nid:1,p:[],ret:[],hof:[],tm:[],top:[],log:[],champ:"",rec:{},played:0,prev:{}};
+ for(var t=0;t<32;t++){S.tm.push({w:0,l:0,c:0});
+   var fullName=T(t);
+   var legend=LEGEND[fullName];
+   if(!legend){
+     POS.forEach(function(g){for(var i=0;i<g[1];i++)S.p.push(mk(g[0],i,t))});
+     continue;
+   }
+   var players=legend.players;
+   players.forEach(function(arr){
+     var pos=arr[0], name=arr[1], ovr=arr[2];
+     var p=mk(pos,0,t,false,name,ovr);
+     p.pot=clamp(p.ovr+rnd(0,4),p.ovr,99);
+     p.age=clamp(p.age,rnd(22,32));
+     S.p.push(p);
+   });
+   var cnt={};
+   S.p.filter(function(p){return p.t===t}).forEach(function(p){cnt[p.pos]=(cnt[p.pos]||0)+1});
+   POS.forEach(function(g){
+     var need=g[1]-(cnt[g[0]]||0);
+     for(var i=0;i<need;i++) S.p.push(mk(g[0],i,t));
+   });
+ }
+}
+function load(){try{var r=localStorage.getItem("gdyn1");if(r){S=JSON.parse(r);if(S&&S.p)return}}catch(e){}fresh()}
+function save(){try{localStorage.setItem("gdyn1",JSON.stringify(S))}catch(e){}}
+function gstat(p,u){var f=p.ovr/80,g=f*f,s={};function z(x){return Math.round(x*u*(.8+Math.random()*.4))}function h(x){return Math.round(x*u*(.7+Math.random()*.6)*2)/2}
+ switch(p.pos){case"QB":s.py=z(4300*g);s.pt=z(29*g);s.pi=z(12/g);s.ry=z(260*f);s.rt=z(3.5*g);break;
+ case"RB":s.ry=z(1700*g);s.rt=z(13*g);s.rc=z(35*f);s.rv=z(260*f);s.rtd=z(1.5*f);break;
+ case"WR":s.rc=z(85*f);s.rv=z(1150*g);s.rtd=z(8*g);break;
+ case"TE":s.rc=z(62*f);s.rv=z(720*g);s.rtd=z(5.5*g);break;
+ case"DL":s.sk=h(10*g);s.tk=z(48*f);break;
+ case"LB":s.tk=z(115*f);s.sk=h(5*g);s.di=z(1.6*f);break;
+ case"CB":s.di=z(3.8*g);s.tk=z(58*f);break;
+ case"S":s.di=z(3.2*g);s.tk=z(78*f);break;
+ case"K":s.fg=z(30*g)}
+ return s}
+function avf(p,s,u){var x=0;switch(p.pos){case"QB":x=s.py/400+s.pt*.6-s.pi*.5+s.ry/200;break;case"RB":x=s.ry/150+s.rt*.6+s.rv/150;break;case"WR":case"TE":x=s.rv/100+s.rtd*.6;break;case"DL":x=s.sk*1.2+s.tk/25;break;case"LB":x=s.tk/18+s.sk+s.di*2;break;case"CB":x=s.di*2.5+s.tk/20;break;case"S":x=s.di*2.5+s.tk/22;break;case"K":x=s.fg/3;break;case"P":x=5*u;break;case"OL":x=u*(p.ovr-45)/4.5}return Math.max(0,x)}
+function win(a,b,str){return Math.random()<1/(1+Math.exp((str[b]-str[a])/3))}
+function play(){
+ var N=32,by=[],str=[],i,g,k,pos,yr=S.season;
+ for(i=0;i<N;i++){by.push({});S.tm[i]={w:0,l:0,c:0}}
+ S.p.forEach(function(p){(by[p.t][p.pos]=by[p.t][p.pos]||[]).push(p)});
+ for(i=0;i<N;i++){var tot=0;for(pos in by[i])by[i][pos].sort(function(a,b){return b.ovr-a.ovr});
+  for(pos in SW)SW[pos].forEach(function(w,j){var x=by[i][pos]&&by[i][pos][j];tot+=w*(x?x.ovr:40)});str[i]=tot/SWS}
+ for(g=0;g<17;g++){var o=[];for(i=0;i<N;i++)o.push(i);o.sort(function(){return Math.random()-.5});
+  for(k=0;k<N;k+=2){var a=o[k],b=o[k+1],aw=win(a,b,str);S.tm[aw?a:b].w++;S.tm[aw?b:a].l++}}
+ var sd=[],rk={};for(i=0;i<N;i++)sd.push(i);sd.sort(function(a,b){return S.tm[b].w-S.tm[a].w||str[b]-str[a]});
+ sd.forEach(function(t,j){rk[t]=j;S.tm[t].po=j<16});
+ var f=sd.slice(0,16);while(f.length>1){var nx=[],n=f.length;for(k=0;k<n/2;k++){var a=f[k],b=f[n-1-k];nx.push(win(a,b,str)?a:b)}f=nx.sort(function(a,b){return rk[a]-rk[b]})}
+ var ch=f[0];S.tm[ch].c=1;
+ var all=[];
+ for(i=0;i<N;i++)for(pos in by[i])by[i][pos].forEach(function(p,d){var u=(U[p.pos]||[])[d]||0,s=gstat(p,u),a=avf(p,s,u);p.s=s;for(var key in s)p.c[key]=(p.c[key]||0)+s[key];p.av+=a;if(p.t===ch)p.rg++;p.L.push({y:yr,t:p.t,o:p.ovr,s:s,a:Math.round(a)});p.sc=p.ovr+(PV[p.pos]||0)+Math.min(8,a/3);all.push(p)});
+ all.sort(function(a,b){return b.sc-a.sc});
+ var np={};all.slice(0,100).forEach(function(p,j){np[p.id]=j+1;if(j<10)p.t10++;if(j===0)p.mvp++});
+ S.top=all.slice(0,100).map(function(p){return{id:p.id,n:p.n,pos:p.pos,t:p.t,age:p.age,o:p.ovr,sc:Math.round(p.sc*10)/10,pv:S.prev[p.id]||0}});S.prev=np;
+ ST.forEach(function(x){var kk=x[0],c=S.p.filter(function(p){return p.s[kk]>0}).sort(function(a,b){return b.s[kk]-a.s[kk]}).slice(0,10).map(function(p){return{n:p.n,pos:p.pos,t:p.t,y:yr,v:p.s[kk]}});S.rec[kk]=(S.rec[kk]||[]).concat(c).sort(function(a,b){return b.v-a.v}).slice(0,10)});
+ var lines=[],hofs=[],nret=0,keep=[],best=all[0];
+ S.p.forEach(function(p){var a=p.age,d;if(a<=25)d=rnd(0,1+Math.ceil((p.pot-p.ovr)/4));else if(a<=29)d=rnd(-1,1);else if(a<=33)d=-rnd(0,2);else d=-rnd(1,3);
+  p.ovr=clamp(p.ovr+d,35,d>0?Math.max(p.pot,p.ovr):99);p.age=a+1;a=p.age;
+  var c=a>=40?1:a===39?.75:a===38?.55:a===37?.35:0;
+  if(Math.random()<c){nret++;p.ry=yr;p.lt=p.t;p.t=-1;var ind=hf(p)>=HOFT&&!p.inh;if(ind){p.inh=1;S.hof.push(p);hofs.push(esc(p.n))}S.ret.push(p);
+   if((p.ovr>=72||ind)&&lines.length<25)lines.push(esc(p.n)+" ("+p.pos+", "+NK[p.lt]+") retired at "+a+(ind?' <span class="up">and was inducted into the Hall of Fame</span>':"")+".")}else keep.push(p)});
+ S.p=keep;
+ var cnt={},nr=0;S.p.forEach(function(p){var kk=p.t+p.pos;cnt[kk]=(cnt[kk]||0)+1});
+ for(i=0;i<N;i++)POS.forEach(function(g){for(var j=cnt[i+g[0]]||0;j<g[1];j++){S.p.push(mk(g[0],j,i,1));nr++}});
+ S.log.unshift({y:yr,ch:T(ch),rec:S.tm[ch].w+"-"+S.tm[ch].l,mvp:best.n+" ("+best.pos+", "+NK[best.t]+")",lines:lines,hofs:hofs,nret:nret,nr:nr});
+ S.champ=NK[ch];S.played=yr;S.season++;save();render()}
+function tbl(h,r){return'<div class="scroll"><table><tr>'+h.map(function(x){return'<th>'+x+'</th>'}).join('')+'</tr>'+r.map(function(x){return'<tr>'+x.map(function(c){return'<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</table></div>'}
+function btn(a,v,t){return'<button class="lnk" data-a="'+a+'" data-v="'+v+'">'+t+'</button>'}
+function pbtn(p){return btn('pl',p.id,esc(p.n))}
+function chips(list,cur,a){return'<div>'+list.map(function(x){return'<button class="btn'+(cur===x[0]?'':' alt')+'" data-a="'+a+'" data-v="'+x[0]+'">'+x[1]+'</button>'}).join('')+'</div>'}
+function teamsV(){
+ if(sel===null){var o=S.tm.map(function(x,i){return i}).sort(function(a,b){return S.tm[b].w-S.tm[a].w});
+  var legendBadge = function(t){var legend=LEGEND[T(t)];return legend?' <span class="badge">★ '+esc(legend.tag)+'</span>':''};
+  return(S.played?'<p class="mu">Season '+S.played+' standings. Click a team for its legendary roster.</p>':'<p class="mu">Click a team to see its all-time best roster. Play seasons to write new history.</p>')+tbl(['Team','W','L','Result'],o.map(function(i){var x=S.tm[i];return[btn('team',i,T(i))+legendBadge(i),x.w,x.l,x.c?'<b>Champion</b>':x.po?'Playoffs':'']}))}
+ var ros=S.p.filter(function(p){return p.t===sel}).sort(function(a,b){return PI[a.pos]-PI[b.pos]||b.ovr-a.ovr});
+ var legend=LEGEND[T(sel)];
+ return'<p>'+btn('back','','← All teams')+'</p><h3>'+T(sel)+(legend?' <span class="badge">★ '+esc(legend.tag)+'</span>':'')+' ('+ros.length+' players)</h3>'+tbl(['Pos','Name','Age','Ovr','Pot','Last season'],ros.map(function(p){return[p.pos,pbtn(p),p.age,p.ovr,p.pot,sline(p.s)]}))}
+function leadV(){
+ var h=chips([["s","This season"],["c","Career (all-time)"],["r","Single-season records"]],sc,"sc")+(sc==="c"?chips([["all","All players"],["act","Active only"],["ret","Retired only"]],cf,"cf"):"")+chips(ST.map(function(x){return[x[0],x[1]]}),st,"st"),lab=ST.filter(function(x){return x[0]===st})[0][1],hd,rows;
+ if(sc==="r"){hd=["#","Player","Pos","Year","Team",lab];rows=(S.rec[st]||[]).map(function(r,i){return[i+1,esc(r.n),r.pos,"Season "+r.y,Tn(r.t),fmt(r.v)]})}
+ else if(sc==="s"){hd=["#","Player","Pos","Team","Age",lab];rows=S.p.filter(function(p){return p.s[st]>0}).sort(function(a,b){return b.s[st]-a.s[st]}).slice(0,15).map(function(p,i){return[i+1,pbtn(p),p.pos,Tn(p.t),p.age,fmt(p.s[st])]})}
+ else{hd=["#","Player","Pos","Status","Age",lab+" (career)"];rows=(cf==="act"?S.p:cf==="ret"?S.ret:S.p.concat(S.ret)).filter(function(p){return p.c[st]>0}).sort(function(a,b){return b.c[st]-a.c[st]}).slice(0,15).map(function(p,i){return[i+1,pbtn(p),p.pos,p.t>=0?Tn(p.t):p.inh?"Hall of Fame":"Retired",p.age,fmt(p.c[st])]})}
+ return h+(rows.length?tbl(hd,rows):'<div class="empty">Play a season to see stats.</div>')}
+function topV(){if(!S.top.length)return'<div class="empty">Play a season to see the top 100 players.</div>';
+ return'<p class="mu">Rank is overall rating plus position value plus production. It is recalculated every season.</p>'+tbl(["#","Player","Pos","Team","Age","Ovr","Score","Move"],S.top.map(function(p,i){var m=S.played<2?"—":p.pv?(p.pv>i+1?'<span class="up">▲'+(p.pv-i-1)+'</span>':p.pv<i+1?'<span class="dn">▼'+(i+1-p.pv)+'</span>':"—"):"New";return[i+1,btn("pl",p.id,esc(p.n)),p.pos,Tn(p.t),p.age,p.o,p.sc,m]}))}
+function res(){var s=q.toLowerCase().trim(),l=S.p.concat(S.ret).filter(function(p){return!s||(p.n+" "+p.pos+" "+(p.t>=0?T(p.t):"retired")).toLowerCase().indexOf(s)>=0}).sort(function(a,b){return b.ovr-a.ovr}).slice(0,30);
+ return tbl(["Name","Pos","Team","Age","Ovr","Career AV"],l.map(function(p){return[pbtn(p),p.pos,p.t>=0?Tn(p.t):"Retired",p.age,p.ovr,Math.round(p.av)]}))}
+function plsV(){return'<input id="q" placeholder="Search by name, position or team" value="'+esc(q)+'" style="width:100%;margin-bottom:10px"><div id="res">'+res()+'</div>'}
+function plV(){var p=fp(pl);if(!p)return"";
+ return'<p>'+btn("back","","← Back")+' '+btn("edit",p.id,"Edit player")+'</p><h3>'+esc(p.n)+", "+p.pos+'</h3><p class="mu">'+(p.t>=0?T(p.t):p.inh?"Retired, Hall of Fame":"Retired")+", age "+p.age+", overall "+p.ovr+", Hall of Fame points "+hf(p)+'</p><p><b>Career:</b> '+(sline(p.c)||"No stats yet")+'</p>'+(p.L.length?tbl(["Season","Team","Ovr","AV","Stats"],p.L.slice().reverse().map(function(l){return["Season "+l.y,Tn(l.t),l.o,l.a,sline(l.s)]})):'<div class="empty">No seasons played yet.</div>')}
+function hofV(){var ap=S.p.concat(S.ret).map(function(p){return[p,hf(p)]}).filter(function(r){return r[1]>0}).sort(function(a,b){return b[1]-a[1]}).slice(0,15);
+ return'<p class="mu">Retired players enter the Hall of Fame with '+HOFT+' points: career approximate value, plus 5 per top-10 season, 12 per #1 season and 3 per championship. '+S.ret.length+' players have retired.</p>'+
+ (S.hof.length?'<h3>Inductees</h3>'+tbl(["Name","Pos","Class","Seasons","Career AV","Top 10s","#1 seasons","Rings","Points"],S.hof.slice().reverse().map(function(p){return[pbtn(p),p.pos,"Season "+p.ry,p.L.length,Math.round(p.av),p.t10,p.mvp,p.rg,hf(p)]})):'<div class="empty">No inductees yet. Players are inducted when they retire.</div>')+
+ '<h3>Hall of Fame points leaders</h3>'+(ap.length?tbl(["#","Player","Pos","Status","Points"],ap.map(function(r,i){var p=r[0];return[i+1,pbtn(p),p.pos,p.t>=0?Tn(p.t):p.inh?"Hall of Fame":"Retired",r[1]]})):'<div class="empty">No points yet.</div>')}
+function logV(){return S.log.length?S.log.map(function(e){return'<h3>Season '+e.y+'</h3><p><b>Champion:</b> '+e.ch+' ('+e.rec+'). <b>Best player:</b> '+esc(e.mvp)+'.</p><p class="mu">'+e.nret+' players retired and '+e.nr+' rookies joined.'+(e.hofs.length?' Hall of Fame class: '+e.hofs.join(", ")+'.':'')+'</p><ul>'+e.lines.map(function(l){return'<li>'+l+'</li>'}).join('')+'</ul>'}).join(''):'<div class="empty">Play a season to start the history book.</div>'}
+function formV(p){var n=p?p.n:"",pos=p?p.pos:"QB",age=p?p.age:22,o=p?p.ovr:65,pt=p?p.pot:75,t=p?p.t:0,np=!p;
+ function opt(v,l,s2){return'<option value="'+v+'"'+(s2?' selected':'')+'>'+l+'</option>'}
+ function fld(l,c){return'<label style="display:flex;flex-direction:column;font-size:13px;color:var(--mu);gap:4px">'+l+c+'</label>'}
+ return'<h3>'+(np?'Create player':'Edit '+esc(p.n))+'</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">'+
+ fld('Name','<input id="fn" value="'+esc(n)+'" maxlength="40">')+
+ fld('Position','<select id="fp">'+POS.map(function(g){return opt(g[0],g[0],g[0]===pos)}).join('')+'</select>')+
+ (np||t>=0?fld('Team','<select id="ft">'+CI.map(function(c,i){return opt(i,T(i),i===t)}).join('')+'</select>'):'')+
+ fld('Age','<input id="fa" type="number" min="18" max="45" value="'+age+'">')+
+ fld('Overall','<input id="fo" type="number" min="35" max="99" value="'+o+'">')+
+ fld('Potential','<input id="fq" type="number" min="35" max="99" value="'+pt+'">')+
+ '</div><p style="margin-top:12px"><button class="btn go" data-a="savep">'+(np?'Create and sign player':'Save changes')+'</button>'+(np?'':'<button class="btn alt" data-a="cancel">Cancel</button>')+'</p>'+(np?'<p class="mu">The new player joins the team you pick. Rosters can grow past 53 and shrink back as players retire.</p>':'')}
+function savep(){var g=function(i){return document.getElementById(i)},p=ed==="new"?null:fp(ed),o=clamp(+g("fo").value||60,35,99);
+ if(!p){p=mk(g("fp").value,0,+g("ft").value);S.p.push(p)}
+ p.n=g("fn").value.trim()||"Player";p.pos=g("fp").value;p.age=clamp(+g("fa").value||25,18,45);p.ovr=o;p.pot=clamp(Math.max(+g("fq").value||o,o),o,99);
+ if(p.t>=0&&g("ft"))p.t=+g("ft").value;
+ pl=p.id;ed=null;save();render()}
+function render(){
+ document.getElementById("a").textContent=S.season;document.getElementById("b").textContent=fmt(S.p.length);document.getElementById("c").textContent=S.champ||"—";document.getElementById("d").textContent=S.hof.length;
+ document.getElementById("play").textContent="Play season "+S.season;
+ document.getElementById("nav").innerHTML=TABS.map(function(t){return'<button data-t="'+t[0]+'" aria-selected="'+(t[0]===tab&&pl===null)+'">'+t[1]+'</button>'}).join("");
+ document.getElementById("view").innerHTML=pl!==null?(ed===pl?formV(fp(pl)):plV()):({teams:teamsV,lead:leadV,top:topV,pls:plsV,"new":function(){return formV(null)},hof:hofV,log:logV})[tab]()}
+document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var a=b.dataset.a,v=b.dataset.v;
+ if(b.dataset.t){tab=b.dataset.t;pl=null;ed=tab==="new"?"new":null;if(tab==="teams")sel=null;render();return}
+ if(b.id==="reset"){if(b.dataset.armed){fresh();tab="teams";sel=null;pl=null;save();render();b.textContent="Reset league";delete b.dataset.armed}else{b.dataset.armed="1";b.textContent="Click again to erase everything";setTimeout(function(){b.textContent="Reset league";delete b.dataset.armed},4000)}return}
+ if(a==="play")play();else if(a==="team"){sel=+v;render()}else if(a==="back"){if(pl!==null){pl=null;ed=null}else sel=null;render()}
+ else if(a==="pl"){pl=+v;render()}else if(a==="sc"){sc=v;render()}else if(a==="st"){st=v;render()}else if(a==="cf"){cf=v;render()}else if(a==="edit"){pl=+v;ed=+v;render()}else if(a==="cancel"){ed=null;render()}else if(a==="savep")savep()});
+document.addEventListener("input",function(e){if(e.target.id==="q"){q=e.target.value;document.getElementById("res").innerHTML=res()}});
+load();render();
+})();
+</script>
+</body>
+</html>
